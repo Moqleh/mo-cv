@@ -54,5 +54,7 @@ jobs:
           test -n "$ASSET_PATH"
           ORIGIN="$(printf '%s' "$SITE_URL" | sed -E 's#(https?://[^/]+).*#\1#')"
           curl --fail --silent --show-error --location --retry 3 "$ORIGIN$ASSET_PATH" >/dev/null
-          curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/manifest.webmanifest" >/dev/null
+          MANIFEST="$(curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/manifest.webmanifest")"
+          printf '%s' "$MANIFEST" | grep -Fq '"start_url":"/mo-cv/"'
+          printf '%s' "$MANIFEST" | grep -Fq '"scope":"/mo-cv/"'
           curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/robots.txt" >/dev/null
