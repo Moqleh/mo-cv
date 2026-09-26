@@ -42,6 +42,9 @@ test('landing navigation, contact links, language switch and legal controls work
   await expect(page.locator('#contact a[href^="mailto:"]')).toBeVisible();
   await page.locator('.headerLocale').click();
   await expect(page.locator('html')).toHaveAttribute('lang','en');
+  await expect(page.getByText('Practical tools to write and organize your resume, check ATS compatibility, and export it as PDF.')).toBeVisible();
+  await expect(page.getByText('Advertising Space',{exact:true})).toBeVisible();
+  await expect(page.locator('main')).toHaveCSS('direction','ltr');
   await page.locator('footer').getByRole('button',{name:'Privacy Policy'}).click();
   await expect(page.getByRole('heading',{name:'Privacy Policy'})).toBeVisible();
   await page.getByRole('button',{name:/Back|Home/}).click();
