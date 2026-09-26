@@ -22,6 +22,10 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: E2E core resume flow
         run: npx playwright test -g "AI-disabled core flow"
-      - name: E2E landing and locale flow
-        run: npx playwright test -g "landing navigation"
+      - name: E2E landing contact
+        run: npx playwright test -g "landing contact"
+      - name: E2E landing locale
+        run: npx playwright test -g "landing language"
+      - name: E2E landing legal
+        run: npx playwright test -g "landing legal"
       - run: npm audit --audit-level=critical
