@@ -11,7 +11,8 @@
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "verify": "npm run typecheck && npm run test && npm run build"
+    "verify": "npm run typecheck && npm run test && npm run build",
+    "audit": "npm audit --audit-level=high"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -28,5 +29,8 @@
     "@types/react-dom": "latest",
     "vitest": "^2.1.9",
     "@vitest/coverage-v8": "^2.1.9"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
