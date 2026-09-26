@@ -11,7 +11,7 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
   await page.getByLabel('المسمى الوظيفي').fill('مهندس برمجيات');
   await page.locator('.editor>textarea').first().fill('ملخص مهني للاختبار');
   await page.locator('.builderTop select').first().selectOption('en');
-  await expect(page.locator('.cvPreview')).toHaveAttribute('dir','ltr').catch(()=>{});
+  await expect(page.locator('.cvPreview')).toHaveAttribute('dir','ltr');
   await expect(page.locator('.cvPreview').getByRole('heading',{name:'Professional Summary'})).toBeVisible();
   await expect(page.locator('.builder aside small')).toContainText('تم الحفظ تلقائياً',{timeout:5000});
   let printed=false;
@@ -40,7 +40,7 @@ test('landing navigation, contact links, language switch and legal controls work
   await expect(page.locator('#contact')).toBeInViewport();
   await expect(page.locator('#contact a[href^="https://wa.me/"]')).toBeVisible();
   await expect(page.locator('#contact a[href^="mailto:"]')).toBeVisible();
-  await page.locator('.headerLocale').click();
+  await page.locator('.headerGlobe').click();
   await expect(page.locator('html')).toHaveAttribute('lang','en');
   await expect(page.getByText('Practical tools to write and organize your resume, check ATS compatibility, and export it as PDF.')).toBeVisible();
   await expect(page.getByText('Advertising Space',{exact:true})).toBeVisible();
