@@ -14,3 +14,18 @@
 @page{size:A4;margin:12mm}@media print{html,body,#root{background:#fff!important;margin:0!important;padding:0!important}.builder>aside,.editor,.builderTop{display:none!important}.builder{display:block!important;background:#fff!important}.cvPreview{display:block!important;width:186mm!important;min-height:273mm!important;margin:0 auto!important;padding:0!important;box-shadow:none!important;border:0!important;overflow:visible!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.cvPreview article,.cvPreview .cvSection{break-inside:avoid;page-break-inside:avoid}.cvPreview h3{break-after:avoid;page-break-after:avoid}.cvPreview a{color:inherit;text-decoration:none}}
 
 .atsPanel{margin:16px 0;padding:16px;border:1px solid #dbe3ee;border-radius:14px;background:#f8fafc}.atsPanel>h3{display:inline-block;margin:0 0 10px}.atsPanel>b{float:left;font-size:1.35rem}.atsPanel ul{margin:8px 0 12px;padding-inline-start:22px}.atsPanel textarea{width:100%;margin-top:6px}.atsPanel small{display:block;line-height:1.8}
+
+/* Approved landing-page reference fidelity */
+main[lang="ar"]>header{direction:ltr}
+main[lang="ar"]>header nav,main[lang="ar"]>header .actions{direction:rtl}
+main[lang="ar"] .hero{direction:ltr}
+main[lang="ar"] .heroCopy,main[lang="ar"] .heroVisual{direction:rtl}
+main[lang="ar"] footer{direction:ltr}
+main[lang="ar"] footer nav,main[lang="ar"] footer p,main[lang="ar"] footer small{direction:rtl}
+.hero{min-height:465px;padding-top:28px;padding-bottom:28px;background:linear-gradient(135deg,#fbfdff 0%,#eff8ff 47%,#dff1ff 100%);position:relative}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}.hero:before{width:440px;height:440px;right:-120px;top:-180px;background:#cfeaff66}.hero:after{width:340px;height:340px;left:-170px;bottom:-220px;background:#dff3ff77}
+.heroCopy,.heroVisual{position:relative;z-index:1}.hero h1{font-size:46px;letter-spacing:-1.2px}.heroCopy>p{max-width:570px}.heroVisual{height:410px}
+.front{height:350px;top:28px}.back{height:310px;top:54px}.languageCard{top:38px}.toolCard{top:137px}
+.section{padding-top:28px;padding-bottom:28px}.section h2,.ai h2{font-weight:800}.features article{background:#fff;min-height:155px}.features article:hover,.template:hover .resume{transform:translateY(-3px);box-shadow:0 14px 34px #17325b16;transition:.2s ease}
+.template .resume{transition:.2s ease}.steps{background:#fff}.ai{box-shadow:inset 0 0 0 1px #d7eaff}.faqGrid button{min-height:43px}.faqGrid button:hover{border-color:#b9d8fb;background:#fbfdff}.faqGrid .rotated{transform:rotate(45deg);transition:.2s}.faqGrid small{line-height:1.7}
+@media(max-width:900px){main[lang="ar"]>header{direction:rtl}.hero{min-height:auto}.heroVisual{height:390px}}
