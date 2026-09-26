@@ -40,6 +40,8 @@ jobs:
           VITE_SUPABASE_URL: https://nkszihlrwbwystbbaadh.supabase.co
           VITE_SUPABASE_ANON_KEY: sb_publishable_hkFTWF1D7kfkaT3aFPecWg_qumsEZ5i
           VITE_AI_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/ai-enhance
+      - name: Include English template previews
+        run: cp english-modern.webp english-professional.webp dist/
       - uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -73,6 +75,8 @@ jobs:
           printf '%s' "$MANIFEST" | grep -Fq '"start_url":"/mo-cv/"'
           printf '%s' "$MANIFEST" | grep -Fq '"scope":"/mo-cv/"'
           curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/robots.txt" >/dev/null
+          curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/english-modern.webp" >/dev/null
+          curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/english-professional.webp" >/dev/null
           SUPABASE_URL="${VITE_SUPABASE_URL:-https://nkszihlrwbwystbbaadh.supabase.co}"
           curl --fail --silent --show-error --location --retry 3 "$SUPABASE_URL/auth/v1/health" -H "apikey: $SUPABASE_PUBLISHABLE_KEY" >/dev/null
           REST_STATUS="$(curl --silent --output /tmp/resumes.json --write-out '%{http_code}' "$SUPABASE_URL/rest/v1/resumes?select=id&limit=1")"
