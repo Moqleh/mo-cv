@@ -1,0 +1,6 @@
+export type Locale='ar'|'en';export type TemplateId='classic'|'professional'|'modern'|'creative'|'elegant';
+export interface Experience{id:string;role:string;company:string;start:string;end:string;current:boolean;description:string}
+export interface Education{id:string;degree:string;school:string;start:string;end:string}
+export interface ResumeV1{schemaVersion:1;id:string;title:string;locale:Locale;template:TemplateId;updatedAt:string;personal:{fullName:string;jobTitle:string;email:string;phone:string;location:string;website:string};summary:string;experience:Experience[];education:Education[];skills:string[];languages:string[]}
+export const emptyResume=(locale:Locale='ar'):ResumeV1=>({schemaVersion:1,id:crypto.randomUUID(),title:locale==='ar'?'سيرتي الذاتية':'My Resume',locale,template:'professional',updatedAt:new Date().toISOString(),personal:{fullName:'',jobTitle:'',email:'',phone:'',location:'',website:''},summary:'',experience:[],education:[],skills:[],languages:[]});
+export function validateResume(r:ResumeV1){const errors:string[]=[];if(!r.personal.fullName.trim())errors.push('fullName');if(r.personal.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.personal.email))errors.push('email');return{valid:errors.length===0,errors}}
