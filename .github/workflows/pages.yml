@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: npm install
+      - run: npm ci
       - name: Audit production configuration
         env:
           VITE_SUPABASE_URL: https://nkszihlrwbwystbbaadh.supabase.co
@@ -33,8 +33,10 @@ jobs:
           if test -n "$VITE_SUPABASE_URL"; then case "$VITE_SUPABASE_URL" in https://*) ;; *) echo "::error::VITE_SUPABASE_URL must use HTTPS"; exit 1;; esac; fi
           if test -n "$VITE_AI_ENDPOINT"; then case "$VITE_AI_ENDPOINT" in https://*) ;; *) echo "::error::VITE_AI_ENDPOINT must use HTTPS"; exit 1;; esac; fi
           if test "$missing" -eq 1; then echo "Production services are not fully configured; deploying the static fallback only."; fi
+      - run: npm run typecheck
+      - run: npm run test
       - run: npm run coverage
-      - run: npm run verify
+      - run: npm audit --audit-level=critical
       - run: npm run build -- --base=/mo-cv/
         env:
           VITE_SUPABASE_URL: https://nkszihlrwbwystbbaadh.supabase.co
