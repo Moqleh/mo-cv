@@ -17,8 +17,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - run: npm install
+      - run: npm run coverage
       - run: npm run verify
       - run: npm run build -- --base=/mo-cv/
       - uses: actions/configure-pages@v5
