@@ -215,3 +215,7 @@ html[lang="ar"] .headerLocale .localeEn,html[lang="en"] .headerLocale .localeAr{
  .compactContact .contactIcon{width:36px!important;height:36px!important;font-size:21px!important}
  .compactContact .contactCards a{min-height:50px!important}
 }
+
+/* Semantic nav buttons behave like the former links */
+.navLink{appearance:none;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;padding:0}
+.navLink:hover,.navLink:focus-visible{text-decoration:underline}
