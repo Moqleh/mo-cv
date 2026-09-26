@@ -31,3 +31,19 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
   await expect(page.getByText('محمد اختبار')).toBeVisible();
 });
 
+
+
+test('landing navigation, contact links, language switch and legal controls work',async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('mocv.locale','ar'));
+  await page.goto('/');
+  await page.getByRole('button',{name:'تواصل معنا'}).first().click();
+  await expect(page.locator('#contact')).toBeInViewport();
+  await expect(page.locator('#contact a[href^="https://wa.me/"]')).toBeVisible();
+  await expect(page.locator('#contact a[href^="mailto:"]')).toBeVisible();
+  await page.locator('.headerLocale').click();
+  await expect(page.locator('html')).toHaveAttribute('lang','en');
+  await page.locator('footer').getByRole('button',{name:'Privacy Policy'}).click();
+  await expect(page.getByRole('heading',{name:'Privacy Policy'})).toBeVisible();
+  await page.getByRole('button',{name:/Back|Home/}).click();
+  await expect(page.locator('.hero')).toBeVisible();
+});
