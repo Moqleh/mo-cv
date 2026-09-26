@@ -52,11 +52,11 @@ test('landing language switch works',async({page})=>{
   await expect(page.locator('main')).toHaveCSS('direction','ltr');
 });
 
-test('landing legal controls work in English',async({page})=>{
-  await page.addInitScript(()=>localStorage.setItem('mocv.locale','en'));
+test('landing legal controls work',async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('mocv.locale','ar'));
   await page.goto('/');
-  await page.locator('footer').getByRole('button',{name:'Privacy Policy'}).click();
-  await expect(page.getByRole('heading',{name:'Privacy Policy'})).toBeVisible();
-  await page.getByRole('button',{name:/Back|Home/}).click();
+  await page.locator('footer').getByRole('button',{name:'سياسة الخصوصية'}).click();
+  await expect(page.getByRole('heading',{name:'سياسة الخصوصية'})).toBeVisible();
+  await page.getByRole('button',{name:/العودة/}).click();
   await expect(page.locator('.hero')).toBeVisible();
 });
