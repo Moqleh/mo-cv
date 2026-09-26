@@ -12,7 +12,8 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "verify": "npm run typecheck && npm run test && npm run build",
-    "audit": "npm audit --audit-level=high"
+    "audit": "npm audit --audit-level=high",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -29,7 +30,8 @@
     "@types/react-dom": "latest",
     "vitest": "^4.1.11",
     "@vitest/coverage-v8": "^4.1.11",
-    "jsdom": "^27.0.0"
+    "jsdom": "^27.0.0",
+    "@playwright/test": "latest"
   },
   "engines": {
     "node": ">=20"
