@@ -32,3 +32,15 @@ main[lang="ar"] footer nav,main[lang="ar"] footer p,main[lang="ar"] footer small
 
 .socials{display:flex;gap:9px;justify-content:flex-end}.socials a{width:27px;height:27px;border-radius:6px;display:grid;place-items:center;background:#ffffff12;color:#fff;text-decoration:none;font-size:12px;font-weight:800}
 @media(max-width:900px){.socials{justify-content:center;margin-top:16px}}
+
+/* Approved MO CV artwork */
+.imagePaper{padding:0!important;overflow:hidden;background:#fff}
+.imagePaper img{width:100%;height:100%;display:block;object-fit:cover;object-position:top center}
+.templateImage{display:block;width:100%;height:210px;object-fit:cover;object-position:top center;background:#fff;border:1px solid #dfe7f1;box-shadow:0 10px 20px #17325b12;transition:.2s ease}
+.template:hover .templateImage{transform:translateY(-3px);box-shadow:0 14px 34px #17325b16}
+.aiDemo{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 12px 30px #1c477523}
+.aiDemo img{display:block;width:100%;height:auto}
+.botImage{width:150px;aspect-ratio:1;border-radius:24px;overflow:hidden;box-shadow:0 14px 32px #1c47752b;background:#fff}
+.botImage img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:900px){.botImage{display:none}.templateImage{height:300px}}
+@media(max-width:600px){.templateImage{height:auto}}
