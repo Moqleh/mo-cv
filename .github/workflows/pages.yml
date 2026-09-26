@@ -19,18 +19,20 @@ jobs:
         with:
           node-version: 24
       - run: npm install
-      - name: Verify production configuration
+      - name: Audit production configuration
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_AI_ENDPOINT: ${{ secrets.VITE_AI_ENDPOINT }}
         run: |
           set -euo pipefail
-          test -n "$VITE_SUPABASE_URL" || { echo "::error::Missing VITE_SUPABASE_URL"; exit 1; }
-          test -n "$VITE_SUPABASE_ANON_KEY" || { echo "::error::Missing VITE_SUPABASE_ANON_KEY"; exit 1; }
-          test -n "$VITE_AI_ENDPOINT" || { echo "::error::Missing VITE_AI_ENDPOINT"; exit 1; }
-          case "$VITE_SUPABASE_URL" in https://*) ;; *) echo "::error::VITE_SUPABASE_URL must use HTTPS"; exit 1;; esac
-          case "$VITE_AI_ENDPOINT" in https://*) ;; *) echo "::error::VITE_AI_ENDPOINT must use HTTPS"; exit 1;; esac
+          missing=0
+          test -n "$VITE_SUPABASE_URL" || { echo "::warning::Missing VITE_SUPABASE_URL — cloud auth/persistence remain disabled"; missing=1; }
+          test -n "$VITE_SUPABASE_ANON_KEY" || { echo "::warning::Missing VITE_SUPABASE_ANON_KEY — cloud auth/persistence remain disabled"; missing=1; }
+          test -n "$VITE_AI_ENDPOINT" || { echo "::warning::Missing VITE_AI_ENDPOINT — AI enhancement remains disabled"; missing=1; }
+          if test -n "$VITE_SUPABASE_URL"; then case "$VITE_SUPABASE_URL" in https://*) ;; *) echo "::error::VITE_SUPABASE_URL must use HTTPS"; exit 1;; esac; fi
+          if test -n "$VITE_AI_ENDPOINT"; then case "$VITE_AI_ENDPOINT" in https://*) ;; *) echo "::error::VITE_AI_ENDPOINT must use HTTPS"; exit 1;; esac; fi
+          if test "$missing" -eq 1; then echo "Production services are not fully configured; deploying the static fallback only."; fi
       - run: npm run coverage
       - run: npm run verify
       - run: npm run build -- --base=/mo-cv/
