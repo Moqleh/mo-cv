@@ -251,15 +251,5 @@ main[lang="ar"]{direction:rtl}
 @media(max-width:380px){.editor{padding:18px 14px}.cvPreview{margin:8px;padding:22px}.builderTop{gap:6px}.builderTop input{max-width:100%;flex:1 1 100%}.headerGlobe{min-width:58px!important;padding:0 8px!important}.hero h1{font-size:31px}}
 @media print{.cvPreview article,.cvPreview .cvSection,.cvPreview .entry{break-inside:avoid;page-break-inside:avoid}.cvPreview h1,.cvPreview h2,.cvPreview h3{orphans:3;widows:3}}
 
-/* Keep the approved light visual identity even when mobile browsers request forced dark mode. */
-:root{color-scheme:only light!important}html,body,#root{background:#fff}input,textarea,select,button{color-scheme:light}
-@media(prefers-color-scheme:dark){
- html,body,#root{background:#fff!important;color:#081c46!important}
- .authPage{background:linear-gradient(145deg,#f8fcff,#e8f5ff)!important}
- .authPage form{background:#fff!important;color:#081c46!important}
- .authPage input{background:#fff!important;color:#10213f!important;border-color:#d9e3ee!important}
- main[lang]{background:#fff!important;color:#081c46!important}
- main[lang]>header{background:#ffffffed!important;color:#081c46!important}
- .hero{background:linear-gradient(135deg,#fbfdff 0%,#eff8ff 47%,#dff1ff 100%)!important}
- .secondary,.features article,.steps,.faqGrid button,.contactCards a{background:#fff!important;color:#10213f!important}
-}
+/* Mobile header keeps Sign In visible beside the locale control. */
+@media(max-width:600px){header{height:72px}.actions{align-items:center}.actions .login{display:inline-flex!important;padding:9px 11px!important;font-size:12px!important;white-space:nowrap}.headerGlobe{min-width:54px!important;padding:0 8px!important}.brand{font-size:18px}.brand span{padding:9px 7px}}
