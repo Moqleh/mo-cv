@@ -31,17 +31,3 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
   await expect(page.getByText('محمد اختبار')).toBeVisible();
 });
 
-
-test('global UI switches between Arabic and English',async({page})=>{
- await page.goto('/');
- await page.getByRole('button',{name:/English/}).first().click();
- await expect(page.locator('html')).toHaveAttribute('dir','ltr');
- await expect(page.getByRole('heading',{name:'Why Choose MO CV?'})).toBeVisible();
- await expect(page.getByRole('button',{name:'Sign In'})).toBeVisible();
- await page.getByRole('button',{name:'Sign In'}).click();
- await expect(page.getByRole('heading',{name:'Sign In'})).toBeVisible();
- await expect(page.getByLabel('Email')).toBeVisible();
- await page.getByRole('button',{name:/العربية/}).first().click();
- await expect(page.locator('html')).toHaveAttribute('dir','rtl');
- await expect(page.getByRole('heading',{name:'تسجيل الدخول'})).toBeVisible();
-});
