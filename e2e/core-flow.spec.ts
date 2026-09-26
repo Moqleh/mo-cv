@@ -57,6 +57,6 @@ test('landing legal controls work',async({page})=>{
   await page.goto('/');
   await page.locator('footer').getByRole('button',{name:'سياسة الخصوصية'}).click();
   await expect(page.getByRole('heading',{name:'سياسة الخصوصية'})).toBeVisible();
-  await page.getByRole('button',{name:/العودة/}).click();
+  await page.getByRole('button',{name:/الرئيسية/}).click();
   await expect(page.locator('.hero')).toBeVisible();
 });
