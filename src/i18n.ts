@@ -26,6 +26,6 @@ function translate(root:ParentNode,locale:UiLocale){
  root.querySelectorAll?.('*').forEach((el:any)=>{for(const a of attrs){const v=el.getAttribute?.(a);if(!v)continue;const key='data-i18n-'+a;const src=el.getAttribute(key)||v;if(!el.hasAttribute(key))el.setAttribute(key,src);const next=locale==='en'?(dict.get(src)||src):src;if(el.getAttribute(a)!==next)el.setAttribute(a,next)}})
 }
 export function usePageTranslation(locale:UiLocale){
- useEffect(()=>{document.documentElement.lang=locale;document.documentElement.dir=locale==='ar'?'rtl':'ltr';translate(document.body,locale);const o=new MutationObserver(()=>translate(document.body,locale));o.observe(document.body,{childList:true,subtree:true,characterData:true});return()=>o.disconnect()},[locale])
+ useEffect(()=>{document.documentElement.lang=locale;document.documentElement.dir=locale==='ar'?'rtl':'ltr';translate(document.body,locale);if(locale==='ar')return;const o=new MutationObserver(()=>translate(document.body,locale));o.observe(document.body,{childList:true,subtree:true,characterData:true});return()=>o.disconnect()},[locale])
 }
 export const uiText=(ar:string,en:string,locale:UiLocale)=>locale==='ar'?ar:en;
