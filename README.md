@@ -1,17 +1,34 @@
 # MO CV
 
-Professional AI-assisted resume builder for Arabic and English.
+Arabic-first, bilingual professional resume builder.
 
-## Status
-Foundation + approved landing experience. Product modules (auth, dashboard, builder, templates, PDF, AI and backend) are developed incrementally with validation gates.
+## Current architecture
+- React + TypeScript + Vite
+- Versioned Resume V1 domain with Zod validation and migrations
+- Responsive approved landing design
+- Authentication adapter (Supabase when configured)
+- PostgreSQL/Supabase migration with Row Level Security
+- Dashboard and resume CRUD
+- Builder, autosave, live preview and five template modes
+- AI client boundary that fails gracefully when the server service is not configured
+- CI: typecheck → tests → production build
 
-## Development
+## Local development
 ```bash
 npm install
+npm run verify
 npm run dev
-npm run typecheck
-npm run build
 ```
 
+Copy `.env.example` to `.env` and configure only the services you actually use.
+
+## Production configuration still required
+A GitHub repository cannot itself provide the production database, authentication service, AI provider, transactional email, hosting/domain or server-side PDF infrastructure. Configure those external services before describing those capabilities as live.
+
+For Supabase, apply `supabase/migrations/001_initial.sql` and set the public URL/anon key. RLS is mandatory.
+
 ## Security
-Never commit secrets. Use `.env` locally and keep only safe placeholders in `.env.example`.
+Never commit service-role keys, AI keys, passwords or other secrets. Browser variables prefixed with `VITE_` are public by definition.
+
+## Status
+The repository is the source of truth. A feature is not called production/live until its real external service is connected and verified.
