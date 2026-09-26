@@ -1,0 +1,1 @@
+export default function NotFound({onHome}:{onHome:()=>void}){return <main className="notFound"><b>404</b><h1>الصفحة غير موجودة</h1><button className="primary" onClick={onHome}>العودة للرئيسية</button></main>}
