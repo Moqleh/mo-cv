@@ -72,3 +72,9 @@ jobs:
           printf '%s' "$MANIFEST" | grep -Fq '"start_url":"/mo-cv/"'
           printf '%s' "$MANIFEST" | grep -Fq '"scope":"/mo-cv/"'
           curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/robots.txt" >/dev/null
+          SUPABASE_URL="${VITE_SUPABASE_URL:-https://nkszihlrwbwystbbaadh.supabase.co}"
+          curl --fail --silent --show-error --location --retry 3 "$SUPABASE_URL/auth/v1/health" >/dev/null
+          REST_STATUS="$(curl --silent --output /tmp/resumes.json --write-out '%{http_code}' "$SUPABASE_URL/rest/v1/resumes?select=id&limit=1")"
+          test "$REST_STATUS" = "401"
+          AI_STATUS="$(curl --silent --output /tmp/ai.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/ai-enhance" -H "Content-Type: application/json" --data '{"action":"summary","text":"test"}')"
+          test "$AI_STATUS" = "401"
