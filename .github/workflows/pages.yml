@@ -37,9 +37,9 @@ jobs:
       - run: npm run verify
       - run: npm run build -- --base=/mo-cv/
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_AI_ENDPOINT: ${{ secrets.VITE_AI_ENDPOINT }}
+          VITE_SUPABASE_URL: https://nkszihlrwbwystbbaadh.supabase.co
+          VITE_SUPABASE_ANON_KEY: sb_publishable_hkFTWF1D7kfkaT3aFPecWg_qumsEZ5i
+          VITE_AI_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/ai-enhance
       - uses: actions/configure-pages@v5
         with:
           enablement: true
