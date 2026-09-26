@@ -1,7 +1,7 @@
 import{test,expect}from'@playwright/test';
 
 test('AI-disabled core flow persists a resume and reaches PDF print',async({page})=>{
-  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'e2e@example.test',name:'E2E User'}))});
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'e2e@example.test',name:'E2E User'}));localStorage.setItem('mocv.locale','ar')});
   await page.goto('/');
   await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
   await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
@@ -29,4 +29,19 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
   await page.getByRole('button',{name:'دخول'}).click();
   await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
   await expect(page.getByText('محمد اختبار')).toBeVisible();
+});
+
+
+test('global UI switches between Arabic and English',async({page})=>{
+ await page.goto('/');
+ await page.getByRole('button',{name:/English/}).first().click();
+ await expect(page.locator('html')).toHaveAttribute('dir','ltr');
+ await expect(page.getByRole('heading',{name:'Why Choose MO CV?'})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Sign In'})).toBeVisible();
+ await page.getByRole('button',{name:'Sign In'}).click();
+ await expect(page.getByRole('heading',{name:'Sign In'})).toBeVisible();
+ await expect(page.getByLabel('Email')).toBeVisible();
+ await page.getByRole('button',{name:/العربية/}).first().click();
+ await expect(page.locator('html')).toHaveAttribute('dir','rtl');
+ await expect(page.getByRole('heading',{name:'تسجيل الدخول'})).toBeVisible();
 });
