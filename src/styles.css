@@ -219,3 +219,11 @@ html[lang="ar"] .headerLocale .localeEn,html[lang="en"] .headerLocale .localeAr{
 /* Semantic nav buttons behave like the former links */
 .navLink{appearance:none;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;padding:0}
 .navLink:hover,.navLink:focus-visible{text-decoration:underline}
+
+/* Locale direction is authoritative: English LTR, Arabic RTL */
+main[lang="en"]{direction:ltr;text-align:left}
+main[lang="en"]>header,main[lang="en"] .hero,main[lang="en"] .heroCopy,main[lang="en"] .heroVisual,main[lang="en"] .section,main[lang="en"] .features article,main[lang="en"] .steps article,main[lang="en"] .aiCopy,main[lang="en"] .faqGrid button,main[lang="en"] .adSpace,main[lang="en"] .contactSection,main[lang="en"] footer,main[lang="en"] .footerLinks,main[lang="en"] .footerAbout{direction:ltr}
+main[lang="en"] .heroCopy,main[lang="en"] .features article,main[lang="en"] .steps article,main[lang="en"] .aiCopy,main[lang="en"] .faqGrid button,main[lang="en"] .footerLinks,main[lang="en"] .footerAbout{text-align:left}
+main[lang="en"] .footerLinks a,main[lang="en"] .footerLinks button{text-align:left}
+main[lang="en"] .steps article>i{left:10px;right:auto}
+main[lang="ar"]{direction:rtl}
