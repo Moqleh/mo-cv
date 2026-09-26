@@ -235,3 +235,13 @@ main[lang="ar"]{direction:rtl}
 /* Single compact locale control */
 .headerGlobe{width:auto!important;min-width:62px!important;padding:0 10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;font-weight:800!important;font-size:13px!important}
 .headerGlobe span{line-height:1}
+
+/* AI artwork must remain visible on mobile */
+.ai{grid-template-columns:1fr 1fr!important}
+.botImage{display:block!important;width:min(100%,520px)!important;aspect-ratio:auto!important;border-radius:20px!important;justify-self:center!important;overflow:hidden!important}
+.botImage img{width:100%!important;height:auto!important;object-fit:contain!important;display:block!important}
+@media(max-width:900px){
+ .ai{grid-template-columns:1fr!important;gap:18px!important}
+ .botImage{display:block!important;grid-row:1;width:100%!important;max-width:560px!important}
+ .aiCopy{grid-row:2}
+}
