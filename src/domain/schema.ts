@@ -1,6 +1,6 @@
 import{z}from'zod';
 const safeText=(max:number)=>z.string().max(max).refine(v=>!/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(v),'Control characters are not allowed');
-const id=z.string().min(1).max(64);const ym=z.string().regex(/^$|^\d{4}-(0[1-9]|1[0-2])$/);const url=z.string().refine(v=>!v||(()=>{try{return new URL(v).protocol==='https:'}catch{return false}})(),'Only HTTPS URLs are allowed');
+const id=z.string().regex(/^[A-Za-z0-9_-]{21}$/,'Invalid ID');const ym=z.string().regex(/^$|^\d{4}-(0[1-9]|1[0-2])$/);const url=z.string().refine(v=>!v||(()=>{try{return new URL(v).protocol==='https:'}catch{return false}})(),'Only HTTPS URLs are allowed');
 const personal=z.object({fullName:safeText(120),jobTitle:safeText(120),email:z.string().max(254).refine(v=>!v||z.string().email().safeParse(v).success),phone:safeText(40),location:safeText(120),website:url,linkedin:url});
 const experience=z.object({id,role:safeText(120),company:safeText(120),location:safeText(120),start:ym,end:ym,current:z.boolean(),description:safeText(4000)}).refine(x=>x.current||!x.start||!x.end||x.start<=x.end,'Invalid date range');
 const education=z.object({id,degree:safeText(160),field:safeText(160),school:safeText(160),location:safeText(120),start:ym,end:ym,description:safeText(3000)}).refine(x=>!x.start||!x.end||x.start<=x.end,'Invalid date range');
