@@ -256,3 +256,6 @@ main[lang="ar"]{direction:rtl}
 
 /* Mobile header: one source of truth for brand, sign-in and locale controls. */
 @media(max-width:600px){main>header{height:72px;padding:0 12px;gap:8px}.brand{flex:1 1 auto;min-width:0;justify-content:flex-start}.brand b{white-space:nowrap}.actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}.actions .mobileSignIn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 9px;white-space:nowrap;font-size:11px}.actions .headerGlobe{position:static;width:52px;min-width:52px;height:44px;padding:0 6px}}
+
+/* Mobile header: one source of truth for brand, sign-in and locale controls. */
+@media(max-width:600px){main>header{height:72px;padding:0 12px;gap:8px}.brand{flex:1 1 auto;min-width:0;justify-content:flex-start}.brand b{white-space:nowrap}.actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}.actions .mobileSignIn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 9px;white-space:nowrap;font-size:11px}.actions .headerGlobe{position:static;width:52px;min-width:52px;height:44px;padding:0 6px}}
