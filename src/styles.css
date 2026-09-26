@@ -52,3 +52,22 @@ main[lang="ar"] footer nav,main[lang="ar"] footer p,main[lang="ar"] footer small
 footer{background:#071b42;color:#fff;padding:38px 6% 20px;display:grid;grid-template-columns:1.7fr repeat(3,1fr);align-items:start;gap:35px}footer .brand{justify-content:flex-start}.footerAbout p{font-size:12px;color:#aabbd2;line-height:1.9;max-width:360px}.footerAbout>small{color:#8fa4c0}.footerLinks,.footerContact{display:grid;gap:11px;font-size:12px}.footerLinks>b,.footerContact>b{font-size:14px;margin-bottom:4px}.footerLinks a,.footerContact a,.footerLinks button{color:#afbdd1;text-decoration:none;text-align:start}.footerLinks a:hover,.footerContact a:hover,.footerLinks button:hover{color:#fff}.footerBottom{grid-column:1/-1;border-top:1px solid #ffffff18;padding-top:18px;display:flex;justify-content:space-between;color:#8195b0;font-size:11px}
 @media(max-width:900px){.contactSection{grid-template-columns:1fr}.contactCards{grid-template-columns:1fr 1fr}footer{grid-template-columns:1fr 1fr}.footerAbout{grid-column:1/-1}.footerBottom{grid-column:1/-1}}
 @media(max-width:600px){.contactSection{margin-inline:3%;padding:28px 20px}.contactCards,footer{grid-template-columns:1fr}.footerAbout,.footerBottom{grid-column:1}.footerBottom{gap:10px;flex-direction:column}}
+
+/* Mobile density refinement */
+@media(max-width:600px){
+  .section{padding:24px 18px}
+  .section h2,.ai h2{font-size:24px;line-height:1.35}
+  .lead{font-size:14px;line-height:1.65;margin-bottom:18px}
+  .features{gap:12px}
+  .features article{min-height:0;padding:18px 16px;border-radius:13px}
+  .features .icon{width:44px;height:44px}
+  .features .icon svg{width:21px;height:21px}
+  .features h3{font-size:16px;margin:12px 0 7px}
+  .features p{font-size:12.5px;line-height:1.65;margin:0}
+  .soft{padding-top:26px}
+  .soft h2{font-size:25px;line-height:1.45;margin-inline:auto;max-width:340px}
+  .templateRow{gap:14px}
+  .steps{gap:0}
+  .steps article{padding:15px}
+  .hero{padding-top:22px;padding-bottom:22px}
+}
