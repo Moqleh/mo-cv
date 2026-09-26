@@ -9,8 +9,8 @@ MO CV is production-ready only when every item below is verified against the dep
 - [x] Dashboard and Builder have cloud persistence adapters and auth guards.
 - [x] AI calls are authenticated and the provider secret stays server-side.
 - [x] A4 print/PDF layout has RTL/LTR-compatible browser rendering and pagination guards.
-- [ ] Supabase project URL/anon key configured in production build.
-- [ ] Database migrations applied to the production Supabase project.
+- [x] Supabase project URL/publishable key configured in production build.
+- [x] Database migrations applied to the production Supabase project.
 - [ ] Supabase auth redirect/email settings verified on the deployed domain.
 - [ ] AI Edge Function deployed with AI_API_KEY, AI_API_URL and AI_MODEL secrets.
 - [ ] Full live E2E verified: signup -> dashboard -> create -> edit -> autosave -> logout -> login -> restore -> PDF.
