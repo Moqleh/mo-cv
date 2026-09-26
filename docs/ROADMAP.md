@@ -1,25 +1,24 @@
 # MO CV — Production Roadmap
 
-## Implemented foundation
-- Approved responsive landing UI
-- Versioned Resume V1 domain
-- Resume repository abstraction (browser persistence in current MVP)
-- Dashboard CRUD
-- Resume Builder
-- Live preview + autosave
-- Five visual template modes
-- Arabic/English document direction
-- Browser print/PDF path
-- CI typecheck/build gate
+## Implemented in the repository
+- Approved responsive landing UI and five visual template modes.
+- Versioned Resume V1 schema, normalization, migrations, bounded local revisions and cloud revision migrations.
+- Dashboard CRUD, Resume Builder, live preview, autosave, section ordering and ATS checks.
+- Local persistence fallback plus authenticated Supabase repository adapter with optimistic concurrency.
+- Supabase authentication flows, authorization/RLS migrations and self-service account deletion.
+- Server-side AI Edge Function implementation with authentication, rate limiting and graceful client fallback.
+- Arabic/English resume direction, legal pages, SEO assets and GitHub Pages-safe PWA paths.
+- A4 browser print/PDF path with RTL/LTR-compatible styles.
+- CI typecheck, unit tests, coverage, build, security audit, Pages deployment and post-deploy smoke tests.
 
-## Production gates still required
-1. Replace browser repository with authenticated server repository + database.
-2. Authentication, authorization and account deletion.
-3. Complete Resume V1 sections, ordering, revisions, conflict/outbox strategy and migrations.
-4. Dedicated PDF renderer and Preview/PDF parity tests.
-5. Server-side AI enhancement API with rate limiting, preview/apply/regenerate and graceful outage.
-6. Full /ar and /en routing/i18n, legal pages and SEO.
-7. Unit/integration/E2E/security/performance testing.
-8. Production deployment, secrets, monitoring, backups and domain.
+## Remaining production verification / product gates
+1. Connect the production Supabase project and configure the public project URL/anon key in the deployment environment.
+2. Apply all database migrations to that production project and verify RLS/account deletion against real users.
+3. Configure Supabase auth redirect/email settings for the deployed domain.
+4. Deploy the AI Edge Function and configure its provider secrets; verify authenticated success, quota and outage paths live.
+5. Run a real browser E2E against production: signup -> dashboard -> create -> edit -> autosave -> logout -> login -> restore -> PDF.
+6. Complete full landing/editor English copy and stable language routing if dedicated /ar and /en URLs remain a release requirement.
+7. Add dedicated PDF renderer/parity tests if exact server-generated PDF output remains a release requirement.
+8. Configure production monitoring/backups and the final custom domain if those are part of launch scope.
 
-No feature is labelled LIVE until its real service is connected and verified.
+No unchecked external service is described as LIVE until it is connected and verified.
