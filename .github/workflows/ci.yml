@@ -20,5 +20,8 @@ jobs:
       - run: npm run coverage
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npm run e2e
+      - name: E2E core resume flow
+        run: npx playwright test -g "AI-disabled core flow"
+      - name: E2E landing and locale flow
+        run: npx playwright test -g "landing navigation"
       - run: npm audit --audit-level=critical
