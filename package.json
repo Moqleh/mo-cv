@@ -20,7 +20,8 @@
     "react": "latest",
     "react-dom": "latest",
     "lucide-react": "latest",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@supabase/supabase-js": "^2.45.4"
   },
   "devDependencies": {
     "@types/react": "latest",
