@@ -97,3 +97,17 @@ footer{background:#071b42;color:#fff;padding:38px 6% 20px;display:grid;grid-temp
     line-height:1.45
   }
 }
+
+/* Compact template gallery on phones */
+@media(max-width:600px){
+  #templates{padding:22px 12px}
+  #templates .templateRow{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:start}
+  #templates .template{min-width:0}
+  #templates .templateImage{width:100%;height:190px!important;object-fit:cover;object-position:top center;border-radius:7px}
+  #templates .template>b{font-size:12px;margin-top:6px}
+  #templates .round{display:none!important}
+}
+@media(min-width:520px) and (max-width:700px){
+  #templates .templateRow{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #templates .templateImage{height:175px!important}
+}
