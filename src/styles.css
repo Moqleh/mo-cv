@@ -145,3 +145,10 @@ footer{background:#071b42;color:#fff;padding:38px 6% 20px;display:grid;grid-temp
   }
   .footerBottom{width:100%;align-items:center;text-align:center;padding-top:14px}
 }
+
+/* Global language control for auth, dashboard, builder and legal pages */
+.globalLocale{position:fixed;top:14px;inset-inline-end:14px;z-index:1000;display:flex;align-items:center;gap:6px;border:1px solid #cfe0f2;background:#fff;color:#173b67;border-radius:999px;padding:8px 12px;font:600 12px inherit;box-shadow:0 8px 24px #17325b18;cursor:pointer}
+.globalLocale svg{width:15px;height:15px}.globalLocale:hover{border-color:#0878f9;color:#0878f9}
+html[dir="ltr"] body{text-align:left}html[dir="ltr"] .features article,html[dir="ltr"] .contactSection,html[dir="ltr"] .footerLinks,html[dir="ltr"] .footerContact{text-align:left}
+@media(max-width:600px){.globalLocale{top:8px;inset-inline-end:8px;padding:6px 9px;font-size:11px}}
+@media print{.globalLocale{display:none!important}}
