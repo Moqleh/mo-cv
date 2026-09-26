@@ -1,0 +1,7 @@
+-- MO CV production schema for Supabase/Postgres
+create table if not exists public.resumes(id uuid primary key default gen_random_uuid(),user_id uuid not null references auth.users(id) on delete cascade,title text not null,schema_version int not null default 1,locale text not null check(locale in('ar','en')),template_id text not null,content jsonb not null,write_version bigint not null default 1,created_at timestamptz not null default now(),updated_at timestamptz not null default now());
+create index if not exists resumes_user_updated_idx on public.resumes(user_id,updated_at desc);
+create table if not exists public.resume_revisions(id uuid primary key default gen_random_uuid(),resume_id uuid not null references public.resumes(id) on delete cascade,user_id uuid not null references auth.users(id) on delete cascade,content jsonb not null,template_id text not null,reason text not null,created_at timestamptz not null default now());
+alter table public.resumes enable row level security;alter table public.resume_revisions enable row level security;
+drop policy if exists "resume owner all" on public.resumes;create policy "resume owner all" on public.resumes for all using(auth.uid()=user_id) with check(auth.uid()=user_id);
+drop policy if exists "revision owner all" on public.resume_revisions;create policy "revision owner all" on public.resume_revisions for all using(auth.uid()=user_id) with check(auth.uid()=user_id);
