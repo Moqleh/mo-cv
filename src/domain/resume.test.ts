@@ -1,4 +1,4 @@
-import{describe,it,expect}from'vitest';import{emptyResume}from'./resume';import{parseResume}from'./schema';import{migrateResume}from'./migrations';import{createId,isId}from'./id';
+import{describe,it,expect}from'vitest';import{emptyResume}from'./resume';import{normalizeResume}from'./normalize';import{parseResume}from'./schema';import{migrateResume}from'./migrations';import{createId,isId}from'./id';
 describe('Resume V1',()=>{
 it('creates exact secure domain IDs',()=>{const ids=Array.from({length:50},()=>createId());expect(ids.every(isId)).toBe(true);expect(new Set(ids).size).toBe(ids.length)});
 it('accepts valid Arabic and English resumes',()=>{expect(parseResume(emptyResume('ar')).locale).toBe('ar');expect(parseResume(emptyResume('en')).locale).toBe('en')});
@@ -12,3 +12,4 @@ it('accepts current experience without end date',()=>{const r=emptyResume();r.ex
 it('v1 migration validates',()=>expect(migrateResume(emptyResume()).schemaVersion).toBe(1));
 it('rejects future schema',()=>expect(()=>migrateResume({...emptyResume(),schemaVersion:2})).toThrow())
 });
+describe('resume normalization',()=>{it('cleans text, unsafe urls and duplicate skills',()=>{const r=emptyResume('ar');r.personal.fullName='  محمد   العقلة  ';r.personal.website='javascript:alert(1)';r.skills=[' React ','React','',' TypeScript '];const n=normalizeResume(r);expect(n.personal.fullName).toBe('محمد العقلة');expect(n.personal.website).toBe('');expect(n.skills).toEqual(['React','TypeScript'])});it('clears end date for current experience',()=>{const r=emptyResume();r.experience=[{id:r.id,role:'Dev',company:'MO',location:'',start:'2025-01',end:'2026-01',current:true,description:''}];expect(normalizeResume(r).experience[0].end).toBe('')})});
