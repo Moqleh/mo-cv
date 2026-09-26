@@ -33,18 +33,28 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
 
 
 
-test('landing navigation, contact links, language switch and legal controls work',async({page})=>{
+test('landing contact navigation works',async({page})=>{
   await page.addInitScript(()=>localStorage.setItem('mocv.locale','ar'));
   await page.goto('/');
   await page.getByRole('button',{name:'تواصل معنا'}).first().click();
   await expect(page.locator('#contact')).toBeInViewport();
   await expect(page.locator('#contact a[href^="https://wa.me/"]')).toBeVisible();
   await expect(page.locator('#contact a[href^="mailto:"]')).toBeVisible();
+});
+
+test('landing language switch works',async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('mocv.locale','ar'));
+  await page.goto('/');
   await page.locator('.headerGlobe').click();
   await expect(page.locator('html')).toHaveAttribute('lang','en');
   await expect(page.getByText('Practical tools to write and organize your resume, check ATS compatibility, and export it as PDF.')).toBeVisible();
   await expect(page.getByText('Advertising Space',{exact:true})).toBeVisible();
   await expect(page.locator('main')).toHaveCSS('direction','ltr');
+});
+
+test('landing legal controls work in English',async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('mocv.locale','en'));
+  await page.goto('/');
   await page.locator('footer').getByRole('button',{name:'Privacy Policy'}).click();
   await expect(page.getByRole('heading',{name:'Privacy Policy'})).toBeVisible();
   await page.getByRole('button',{name:/Back|Home/}).click();
