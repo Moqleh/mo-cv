@@ -158,3 +158,14 @@ html[dir="ltr"] body{text-align:left}html[dir="ltr"] .features article,html[dir=
   footer{gap:14px!important;padding-bottom:18px!important}
   .footerBottom{justify-content:center!important;padding-top:12px!important}
 }
+
+/* Advertising slot + Mohammed Al-Oqleh official brand */
+.adSpace{padding:24px 6%;background:#f6f9fc}.adSpaceInner{max-width:1120px;margin:auto;min-height:110px;border:1px dashed #b8c7d9;border-radius:14px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;color:#63758b}.adSpaceInner small{font-size:9px;letter-spacing:.12em}.adSpaceInner b{font-size:14px;color:#344963}.adSpaceInner p{font-size:11px;margin:0}
+.personalBrand{display:flex;align-items:flex-start;justify-content:center}.personalBrand a{display:block;border-radius:12px;overflow:hidden;line-height:0}.personalBrand img{display:block;width:92px;height:58px;object-fit:cover;object-position:center}
+footer{grid-template-columns:auto 1.7fr repeat(2,1fr)}
+@media(max-width:900px){footer{grid-template-columns:auto 1fr 1fr}.personalBrand{align-items:center}.footerAbout{grid-column:auto}}
+@media(max-width:600px){
+ .adSpace{padding:14px 14px}.adSpaceInner{min-height:78px;padding:10px}.adSpaceInner p{font-size:10px}
+ .personalBrand{width:100%;order:-1}.personalBrand img{width:78px;height:50px}
+ footer{display:flex!important}
+}
