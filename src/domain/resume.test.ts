@@ -2,6 +2,7 @@ import{describe,it,expect}from'vitest';import{emptyResume}from'./resume';import{
 describe('Resume V1',()=>{
 it('creates exact secure domain IDs',()=>{const ids=Array.from({length:50},()=>createId());expect(ids.every(isId)).toBe(true);expect(new Set(ids).size).toBe(ids.length)});
 it('accepts valid Arabic and English resumes',()=>{expect(parseResume(emptyResume('ar')).locale).toBe('ar');expect(parseResume(emptyResume('en')).locale).toBe('en')});
+it('rejects invalid section permutations',()=>{const r=emptyResume();r.sectionOrder=['summary','summary','education','skills','languages','certifications','projects','courses'];expect(()=>parseResume(r)).toThrow()});
 it('rejects malformed IDs',()=>{const r=emptyResume();r.id='not-valid';expect(()=>parseResume(r)).toThrow()});
 it('rejects javascript URLs',()=>{const r=emptyResume();r.personal.website='javascript:alert(1)';expect(()=>parseResume(r)).toThrow()});
 it('allows angle brackets as plain text',()=>{const r=emptyResume();r.summary='<developer>';expect(parseResume(r).summary).toBe('<developer>')});
