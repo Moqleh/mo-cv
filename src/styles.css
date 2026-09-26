@@ -245,3 +245,8 @@ main[lang="ar"]{direction:rtl}
  .botImage{display:block!important;grid-row:1;width:100%!important;max-width:560px!important}
  .aiCopy{grid-row:2}
 }
+
+/* Final audit hardening */
+.formError[role="status"],.statusLive{min-height:1em}
+@media(max-width:380px){.editor{padding:18px 14px}.cvPreview{margin:8px;padding:22px}.builderTop{gap:6px}.builderTop input{max-width:100%;flex:1 1 100%}.headerGlobe{min-width:58px!important;padding:0 8px!important}.hero h1{font-size:31px}}
+@media print{.cvPreview article,.cvPreview .cvSection,.cvPreview .entry{break-inside:avoid;page-break-inside:avoid}.cvPreview h1,.cvPreview h2,.cvPreview h3{orphans:3;widows:3}}
