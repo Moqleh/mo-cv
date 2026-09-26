@@ -14,6 +14,6 @@ MO CV is production-ready only when every item below is verified against the dep
 - [ ] Supabase auth redirect/email settings verified on the deployed domain.
 - [ ] AI Edge Function deployed with AI_API_KEY, AI_API_URL and AI_MODEL secrets.
 - [ ] Full live E2E verified: signup -> dashboard -> create -> edit -> autosave -> logout -> login -> restore -> PDF.
-- [ ] AI-disabled E2E verified so core resume creation/export never depends on AI.
+- [x] AI-disabled browser E2E verified in CI: dashboard -> create -> edit -> autosave -> PDF print -> logout -> login -> restore.
 
 Never describe unchecked items as live or verified.
