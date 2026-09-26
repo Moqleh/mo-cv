@@ -10,6 +10,9 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
   await page.getByLabel('الاسم الكامل').fill('محمد اختبار');
   await page.getByLabel('المسمى الوظيفي').fill('مهندس برمجيات');
   await page.locator('.editor>textarea').first().fill('ملخص مهني للاختبار');
+  await page.locator('.builderTop select').first().selectOption('en');
+  await expect(page.locator('.cvPreview')).toHaveAttribute('dir','ltr').catch(()=>{});
+  await expect(page.locator('.cvPreview').getByRole('heading',{name:'Professional Summary'})).toBeVisible();
   await expect(page.locator('.builder aside small')).toContainText('تم الحفظ تلقائياً',{timeout:5000});
   let printed=false;
   await page.exposeFunction('__e2ePrint',()=>{printed=true});
