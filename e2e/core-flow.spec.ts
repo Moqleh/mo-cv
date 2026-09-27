@@ -60,3 +60,44 @@ test('landing legal controls work',async({page})=>{
   await page.getByRole('button',{name:/الرئيسية/}).click();
   await expect(page.locator('.hero')).toBeVisible();
 });
+
+
+test('final CV renders all professional sections and printable layout safely',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'final@example.test',name:'Final CV'}));localStorage.setItem('mocv.locale','en')});
+  await page.goto('/#/dashboard');
+  await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await page.getByLabel('Full Name').fill('Mohammed Al-Oqleh');
+  await page.getByLabel('Job Title').fill('Senior Finance Professional');
+  await page.getByLabel('Email').fill('candidate@example.com');
+  await page.getByLabel('Phone').fill('+966500000000');
+  await page.getByLabel('Location').fill('Riyadh, Saudi Arabia');
+  await page.locator('.editor>textarea').first().fill('Experienced professional focused on measurable business outcomes, leadership and operational excellence.');
+  await page.getByRole('button',{name:'Add Experience'}).click();
+  const entry=page.locator('.entry').first();
+  await entry.locator('input').nth(0).fill('Finance Manager');
+  await entry.locator('input').nth(1).fill('Example Company');
+  await entry.locator('textarea').fill('Led planning, reporting and process improvement initiatives with measurable outcomes.');
+  await page.getByRole('button',{name:'Add Education'}).click();
+  await page.getByRole('button',{name:'Add Certification'}).click();
+  await page.getByRole('button',{name:'Add Project'}).click();
+  await page.getByRole('button',{name:'Add Course'}).click();
+  await page.getByPlaceholder('React, TypeScript, Leadership...').fill('Financial Analysis, Leadership, Budgeting, Reporting');
+  await page.getByPlaceholder('Arabic: Native, English: Advanced').fill('Arabic: Native, English: Advanced');
+  const preview=page.locator('.cvPreview');
+  await expect(preview.getByText('Mohammed Al-Oqleh')).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Professional Summary'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Experience'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Education'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Certifications'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Projects'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Courses'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Skills'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Languages'})).toBeVisible();
+  await expect(preview).toHaveAttribute('dir','ltr');
+  await expect(preview).toHaveCSS('overflow','visible');
+  const sections=preview.locator('.cvSection');
+  for(let i=0;i<await sections.count();i++){
+    const box=await sections.nth(i).boundingBox();
+    if(box) expect(box.width).toBeLessThanOrEqual((await preview.boundingBox())!.width+1);
+  }
+});
