@@ -39,7 +39,13 @@ jobs:
       - run: npm run test
       - run: npm run coverage
       - run: npm audit --audit-level=critical
-      - run: npm run build
+      - name: Build production bundle
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: https://nkszihlrwbwystbbaadh.supabase.co
+          VITE_SUPABASE_ANON_KEY: sb_publishable_hkFTWF1D7kfkaT3aFPecWg_qumsEZ5i
+          VITE_AI_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/ai-enhance
+          VITE_MODERATION_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/cv-moderate
       - run: npx playwright install --with-deps chromium
       - name: Full end-to-end acceptance suite
         run: npm run e2e
