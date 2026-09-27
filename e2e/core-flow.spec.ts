@@ -69,7 +69,8 @@ test('final CV renders all professional sections and printable layout safely',as
   await page.goto('/#/dashboard');
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
   await expect(page.locator('.builder aside small')).toContainText('Autosaved',{timeout:5000});
-  await page.getByLabel('Full Name').pressSequentially('Mohammed Al-Oqleh');
+  await page.getByLabel('Full Name').fill('Mohammed Al-Oqleh');
+  await expect(page.locator('.cvPreview h1')).toHaveText('Mohammed Al-Oqleh');
   await page.getByLabel('Job Title').pressSequentially('Senior Finance Professional');
   await page.getByLabel('Email').fill('candidate@example.com');
   await page.getByLabel('Phone').fill('+966500000000');
@@ -131,7 +132,8 @@ test('all five templates preserve CV content in Arabic and English',async({page}
   await page.goto('/#/dashboard');
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
   await expect(page.locator('.builder aside small')).toContainText('Autosaved',{timeout:5000});
-  await page.getByLabel('Full Name').pressSequentially('Template Verification');
+  await page.getByLabel('Full Name').fill('Template Verification');
+  await expect(page.locator('.cvPreview h1')).toHaveText('Template Verification');
   const preview=page.locator('.cvPreview');
   const templateSelect=page.locator('.builderTop select').nth(1);
   for(const id of ['classic','professional','modern','creative','elegant']){
