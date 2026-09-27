@@ -89,6 +89,8 @@ jobs:
           ORIGIN="$(printf '%s' "$SITE_URL" | sed -E 's#(https?://[^/]+).*#\1#')"
           JS="$(curl --fail --silent --show-error --location --retry 3 "$ORIGIN$ASSET_PATH")"
           printf '%s' "$JS" | grep -Fq 'Professional AI Resume Platform'
+          printf '%s' "$JS" | grep -Fq 'Report a CV Issue'
+          printf '%s' "$JS" | grep -Fq 'responsibility acknowledgement'
           if printf '%s' "$JS" | grep -Fq '<div className="badge">🚀 منصة احترافية'; then echo '::error::Old hard-coded Arabic hero badge detected'; exit 1; fi
           MANIFEST="$(curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/manifest.webmanifest")"
           printf '%s' "$MANIFEST" | grep -Fq '"start_url":"/mo-cv/"'
@@ -102,3 +104,5 @@ jobs:
           test "$REST_STATUS" = "401"
           AI_STATUS="$(curl --silent --output /tmp/ai.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/ai-enhance" -H "Content-Type: application/json" --data '{"action":"summary","text":"test"}')"
           test "$AI_STATUS" = "401"
+          MOD_STATUS="$(curl --silent --output /tmp/mod.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/cv-moderate" -H "Content-Type: application/json" --data '{"fields":[{"path":"summary","text":"test"}]}')"
+          test "$MOD_STATUS" = "401"
