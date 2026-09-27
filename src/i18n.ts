@@ -22,8 +22,8 @@ const original=new WeakMap<Text,string>();
 const attrs=['placeholder','aria-label','title'] as const;
 function translate(root:ParentNode,locale:UiLocale){
  const nodes:Text[]=[];const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())nodes.push(n as Text);
- for(const node of nodes){if(!original.has(node))original.set(node,node.nodeValue||'');const src=original.get(node)||'';if(locale==='ar'){if(node.nodeValue!==src)node.nodeValue=src;continue}const trimmed=src.trim();const out=dict.get(trimmed);if(out!==undefined){const next=src.replace(trimmed,out);if(node.nodeValue!==next)node.nodeValue=next}}
- root.querySelectorAll?.('*').forEach((el:any)=>{for(const a of attrs){const v=el.getAttribute?.(a);if(!v)continue;const key='data-i18n-'+a;const src=el.getAttribute(key)||v;if(!el.hasAttribute(key))el.setAttribute(key,src);const next=locale==='en'?(dict.get(src)||src):src;if(el.getAttribute(a)!==next)el.setAttribute(a,next)}})
+ for(const node of nodes){if(node.parentElement?.closest('[data-no-translate]'))continue;if(!original.has(node))original.set(node,node.nodeValue||'');const src=original.get(node)||'';if(locale==='ar'){if(node.nodeValue!==src)node.nodeValue=src;continue}const trimmed=src.trim();const out=dict.get(trimmed);if(out!==undefined){const next=src.replace(trimmed,out);if(node.nodeValue!==next)node.nodeValue=next}}
+ root.querySelectorAll?.('*').forEach((el:any)=>{if(el.closest?.('[data-no-translate]'))return;for(const a of attrs){const v=el.getAttribute?.(a);if(!v)continue;const key='data-i18n-'+a;const src=el.getAttribute(key)||v;if(!el.hasAttribute(key))el.setAttribute(key,src);const next=locale==='en'?(dict.get(src)||src):src;if(el.getAttribute(a)!==next)el.setAttribute(a,next)}})
 }
 export function usePageTranslation(locale:UiLocale){
  useEffect(()=>{document.documentElement.lang=locale;document.documentElement.dir=locale==='ar'?'rtl':'ltr';translate(document.body,locale);if(locale==='ar')return;const o=new MutationObserver(()=>translate(document.body,locale));o.observe(document.body,{childList:true,subtree:true,characterData:true});return()=>o.disconnect()},[locale])
