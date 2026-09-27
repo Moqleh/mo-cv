@@ -69,6 +69,7 @@ test('final CV renders all professional sections and printable layout safely',as
   await page.goto('/');
   await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await page.locator('.builderTop select').first().selectOption('en');
   await page.getByLabel('Full Name').fill('Mohammed Al-Oqleh');
   await expect(page.locator('.cvPreview h1')).toHaveText('Mohammed Al-Oqleh');
   await page.getByLabel('Job Title').pressSequentially('Senior Finance Professional');
