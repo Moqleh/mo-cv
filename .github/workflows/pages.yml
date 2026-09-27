@@ -44,10 +44,13 @@ jobs:
       - name: Full end-to-end acceptance suite
         run: npm run e2e
         env:
-          VITE_SUPABASE_URL: https://nkszihlrwbwystbbaadh.supabase.co
-          VITE_SUPABASE_ANON_KEY: sb_publishable_hkFTWF1D7kfkaT3aFPecWg_qumsEZ5i
-          VITE_AI_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/ai-enhance
-          VITE_MODERATION_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/cv-moderate
+          # Browser acceptance tests use the explicit local DEV identity and mock
+          # network boundaries. The production bundle above is still built with
+          # the real service configuration.
+          VITE_SUPABASE_URL: ''
+          VITE_SUPABASE_ANON_KEY: ''
+          VITE_AI_ENDPOINT: ''
+          VITE_MODERATION_ENDPOINT: ''
       - name: Include English template previews
         run: cp english-modern.webp english-professional.webp dist/
       - uses: actions/configure-pages@v5
