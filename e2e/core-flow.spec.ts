@@ -68,6 +68,7 @@ test('final CV renders all professional sections and printable layout safely',as
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'final@example.test',name:'Final CV'}));localStorage.setItem('mocv.locale','en')});
   await page.goto('/#/dashboard');
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await expect(page.locator('.builder aside small')).toContainText('Autosaved',{timeout:5000});
   await page.getByLabel('Full Name').fill('Mohammed Al-Oqleh');
   await page.getByLabel('Job Title').fill('Senior Finance Professional');
   await page.getByLabel('Email').fill('candidate@example.com');
@@ -129,6 +130,7 @@ test('all five templates preserve CV content in Arabic and English',async({page}
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'templates@example.test',name:'Templates'}));localStorage.setItem('mocv.locale','en')});
   await page.goto('/#/dashboard');
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await expect(page.locator('.builder aside small')).toContainText('Autosaved',{timeout:5000});
   await page.getByLabel('Full Name').fill('Template Verification');
   const preview=page.locator('.cvPreview');
   const templateSelect=page.locator('.builderTop select').nth(1);
