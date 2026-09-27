@@ -101,3 +101,46 @@ test('final CV renders all professional sections and printable layout safely',as
     if(box) expect(box.width).toBeLessThanOrEqual((await preview.boundingBox())!.width+1);
   }
 });
+
+
+test('Arabic final CV preserves every entered field and RTL output',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'arabic@example.test',name:'Arabic CV'}));localStorage.setItem('mocv.locale','ar')});
+  await page.goto('/');
+  await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
+  await page.getByRole('button',{name:/إنشاء (سيرة جديدة|الآن)/}).first().click();
+  const p=page.locator('.cvPreview');
+  await page.getByLabel('الاسم الكامل').fill('محمد العقلة');
+  await page.getByLabel('المسمى الوظيفي').fill('مدير مالي');
+  await page.getByLabel('البريد الإلكتروني').fill('arabic@example.com');
+  await page.getByLabel('الهاتف').fill('+966500000001');
+  await page.getByLabel('الموقع').first().fill('الرياض، السعودية');
+  await page.getByLabel('الموقع الإلكتروني').fill('https://example.com');
+  await page.getByLabel('LinkedIn').fill('https://linkedin.com/in/example');
+  await page.locator('.editor>textarea').first().fill('ملخص مهني عربي شامل.');
+  await expect(p).toHaveAttribute('dir','rtl');
+  await expect(p).toHaveAttribute('lang','ar');
+  for(const value of ['محمد العقلة','مدير مالي','arabic@example.com','+966500000001','الرياض، السعودية','https://example.com','https://linkedin.com/in/example','ملخص مهني عربي شامل.']) await expect(p.getByText(value,{exact:false})).toBeVisible();
+  for(const heading of ['الملخص المهني']) await expect(p.getByRole('heading',{name:heading})).toBeVisible();
+});
+
+test('all five templates preserve CV content in Arabic and English',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'templates@example.test',name:'Templates'}));localStorage.setItem('mocv.locale','en')});
+  await page.goto('/#/dashboard');
+  await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await page.getByLabel('Full Name').fill('Template Verification');
+  const preview=page.locator('.cvPreview');
+  const templateSelect=page.locator('.builderTop select').nth(1);
+  for(const id of ['classic','professional','modern','creative','elegant']){
+    await templateSelect.selectOption(id);
+    await expect(preview).toHaveClass(new RegExp(id));
+    await expect(preview.getByText('Template Verification')).toBeVisible();
+  }
+  await page.locator('.builderTop select').first().selectOption('ar');
+  await expect(preview).toHaveAttribute('dir','rtl');
+  await expect(preview).toHaveAttribute('lang','ar');
+  for(const id of ['classic','professional','modern','creative','elegant']){
+    await templateSelect.selectOption(id);
+    await expect(preview).toHaveClass(new RegExp(id));
+    await expect(preview.getByText('Template Verification')).toBeVisible();
+  }
+});
