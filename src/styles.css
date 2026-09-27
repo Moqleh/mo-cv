@@ -313,3 +313,27 @@ main[lang="ar"]{direction:rtl}
 }
 
 .previewColumn{min-width:0}.cvIssueActions{margin:14px 0 24px;display:grid;gap:10px}.reportIssueButton{justify-self:center}.issueReport{display:grid;gap:10px;padding:16px;border:1px solid #dbe4f0;border-radius:14px;background:#fff;box-shadow:0 8px 28px rgba(15,23,42,.08)}.issueReport select,.issueReport textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff}.issueReport .primary{justify-self:start}@media print{.cvIssueActions,.finalReviewNotice,.atsPanel,.builder aside,.builder .editor,.globalLocale{display:none!important}.previewColumn{display:block!important}}
+
+/* Builder mobile UX: keep controls compact, readable and direction-safe */
+@media(max-width:700px){
+ .editor{padding:76px 16px 22px;overflow:visible}
+ .builderTop{position:relative;top:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(110px,.55fr);gap:8px;padding:0 0 14px;background:#fff;z-index:1}
+ .builderTop input{grid-column:1/-1;max-width:none!important;min-width:0}
+ .builderTop select{width:100%!important;min-width:0}
+ .builderTop button{width:100%!important;min-height:46px;justify-content:center}
+ .builderTop .primary{grid-column:auto}
+ .finalReviewNotice{font-size:14px;line-height:1.75;padding:14px!important;margin:4px 0 14px!important}
+ .finalReviewNotice p{margin:8px 0 12px}
+ .finalReviewNotice label{display:grid!important;grid-template-columns:24px minmax(0,1fr);align-items:start;gap:8px;line-height:1.65}
+ .finalReviewNotice input[type=checkbox]{width:20px!important;height:20px;margin:3px 0 0}
+ .atsPanel{padding:14px;margin:12px 0}.atsPanel>b{font-size:1.2rem}.atsPanel ul{font-size:13px;line-height:1.65}
+ .editor>h3,.sectionTitle h3{font-size:20px;margin-top:24px}
+ .editor input,.editor textarea,.editor select{font-size:16px;line-height:1.45;min-height:46px}
+ .editor>input{direction:inherit;text-align:start}
+ .entry{grid-template-columns:1fr}.entry textarea,.entry button{grid-column:1}.entry button{grid-row:auto;justify-self:end}
+ .previewColumn{padding:10px 0 24px;overflow:hidden}
+ .cvPreview{width:calc(100% - 24px);max-width:100%;margin:12px auto!important;padding:26px 24px;min-height:600px;overflow-wrap:anywhere;word-break:normal}
+ .cvPreview.professional .cvIdentity{margin:-26px -24px 20px;padding:24px}
+ .cvPreview h1{font-size:26px!important;line-height:1.25}.cvPreview h2{font-size:15px!important}
+ .skillTags,.languageList{overflow-wrap:anywhere}
+}
