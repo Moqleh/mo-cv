@@ -178,3 +178,16 @@ test('secure export blocks rejected moderation and prints only allowed content',
   await page.unroute('**/functions/v1/cv-moderate');await page.route('**/functions/v1/cv-moderate',async route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({allowed:true,categories:[],reason:'ok'})}));
   await page.getByRole('button',{name:/PDF/}).click();await expect.poll(()=>printed).toBe(true);
 });
+
+
+test('required responsibility terms and CV issue reporting are visible and actionable',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'requirements@example.test',name:'Requirements'}));localStorage.setItem('mocv.locale','ar')});
+  await page.goto('/#/dashboard');await page.getByRole('button',{name:/إنشاء (سيرة جديدة|الآن)/}).first().click();
+  await expect(page.getByRole('note')).toContainText('أنت المسؤول الأول');
+  await expect(page.getByRole('note')).toContainText('يمنع استخدام الخدمة');
+  await expect(page.getByRole('checkbox')).not.toBeChecked();
+  await expect(page.getByRole('button',{name:'الإبلاغ عن مشكلة في السيرة'})).toBeVisible();
+  await page.getByRole('button',{name:'الإبلاغ عن مشكلة في السيرة'}).click();
+  await expect(page.getByLabel('نوع المشكلة')).toBeVisible();
+  await expect(page.getByRole('button',{name:'إرسال البلاغ'})).toBeVisible();
+});
