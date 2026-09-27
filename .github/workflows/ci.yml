@@ -14,22 +14,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: npm install
+          cache: npm
+      - run: npm ci
       - run: npm run typecheck
       - run: npm run test
       - run: npm run coverage
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - name: E2E core resume flow
-        run: npx playwright test -g "AI-disabled core flow"
-      - name: E2E landing contact
-        run: npx playwright test -g "landing contact"
-      - name: E2E landing locale
-        run: npx playwright test -g "landing language"
-      - name: E2E landing legal
-        run: npx playwright test -g "landing legal"
-      - name: E2E password recovery route
-        run: npx playwright test -g "password recovery link"
-      - name: E2E English dashboard and templates
-        run: npx playwright test -g "English dashboard and builder"
+      - name: E2E full application suite
+        run: npm run e2e
       - run: npm audit --audit-level=critical
