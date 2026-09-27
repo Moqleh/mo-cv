@@ -17,6 +17,8 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
   let printed=false;
   await page.exposeFunction('__e2ePrint',()=>{printed=true});
   await page.evaluate(()=>{window.print=()=>{void (window as any).__e2ePrint()}});
+  await page.getByRole('checkbox').check();
+  await page.route('**/functions/v1/cv-moderate',async route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({allowed:true,categories:[],reason:'ok'})}));
   await page.getByRole('button',{name:/PDF/}).click();
   await expect.poll(()=>printed).toBe(true);
   await page.getByRole('button',{name:/الرئيسية/}).first().click();
@@ -67,6 +69,7 @@ test('final CV renders all professional sections and printable layout safely',as
   await page.goto('/#/dashboard');
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
   await page.getByLabel('Full Name').fill('Mohammed Al-Oqleh');
+  await expect(page.locator('.cvPreview').getByText('Mohammed Al-Oqleh')).toBeVisible();
   await page.getByLabel('Job Title').fill('Senior Finance Professional');
   await page.getByLabel('Email').fill('candidate@example.com');
   await page.getByLabel('Phone').fill('+966500000000');
@@ -128,6 +131,7 @@ test('all five templates preserve CV content in Arabic and English',async({page}
   await page.goto('/#/dashboard');
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
   await page.getByLabel('Full Name').fill('Template Verification');
+  await expect(page.locator('.cvPreview').getByText('Template Verification')).toBeVisible();
   const preview=page.locator('.cvPreview');
   const templateSelect=page.locator('.builderTop select').nth(1);
   for(const id of ['classic','professional','modern','creative','elegant']){
@@ -143,4 +147,31 @@ test('all five templates preserve CV content in Arabic and English',async({page}
     await expect(preview).toHaveClass(new RegExp(id));
     await expect(preview.getByText('Template Verification')).toBeVisible();
   }
+});
+
+
+test('secure export requires acknowledgement and fails closed when moderation is unavailable',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'security@example.test',name:'Security'}));localStorage.setItem('mocv.locale','en')});
+  await page.goto('/#/dashboard');
+  await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await page.getByLabel('Full Name').fill('Security Verification');
+  let printed=false;await page.exposeFunction('__securePrint',()=>{printed=true});await page.evaluate(()=>{window.print=()=>{void (window as any).__securePrint()}});
+  await page.getByRole('button',{name:/PDF/}).click();
+  await expect(page.getByRole('status')).toContainText('responsibility acknowledgement');
+  expect(printed).toBe(false);
+  await page.getByRole('checkbox').check();
+  await page.route('**/functions/v1/cv-moderate',async route=>route.abort());
+  await page.getByRole('button',{name:/PDF/}).click();
+  await expect(page.getByRole('status')).toContainText('safety check could not be completed');
+  expect(printed).toBe(false);
+});
+
+test('secure export blocks rejected moderation and prints only allowed content',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'moderation@example.test',name:'Moderation'}));localStorage.setItem('mocv.locale','en')});
+  await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();await page.getByLabel('Full Name').fill('Moderation Verification');await page.getByRole('checkbox').check();
+  let printed=false;await page.exposeFunction('__moderationPrint',()=>{printed=true});await page.evaluate(()=>{window.print=()=>{void (window as any).__moderationPrint()}});
+  await page.route('**/functions/v1/cv-moderate',async route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({allowed:false,severity:'standard',categories:['unprofessional'],strikes30d:1,suspended:false})}));
+  await page.getByRole('button',{name:/PDF/}).click();await expect(page.getByRole('status')).toContainText('Export was blocked');expect(printed).toBe(false);
+  await page.unroute('**/functions/v1/cv-moderate');await page.route('**/functions/v1/cv-moderate',async route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({allowed:true,categories:[],reason:'ok'})}));
+  await page.getByRole('button',{name:/PDF/}).click();await expect.poll(()=>printed).toBe(true);
 });
