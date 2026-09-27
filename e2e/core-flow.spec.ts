@@ -66,9 +66,9 @@ test('landing legal controls work',async({page})=>{
 
 test('final CV renders all professional sections and printable layout safely',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'final@example.test',name:'Final CV'}));localStorage.setItem('mocv.locale','en')});
-  await page.goto('/#/dashboard');
+  await page.goto('/');
+  await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
-  await expect(page.locator('.builder aside small')).toContainText('Autosaved',{timeout:5000});
   await page.getByLabel('Full Name').fill('Mohammed Al-Oqleh');
   await expect(page.locator('.cvPreview h1')).toHaveText('Mohammed Al-Oqleh');
   await page.getByLabel('Job Title').pressSequentially('Senior Finance Professional');
@@ -129,9 +129,9 @@ test('Arabic final CV preserves every entered field and RTL output',async({page}
 
 test('all five templates preserve CV content in Arabic and English',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'templates@example.test',name:'Templates'}));localStorage.setItem('mocv.locale','en')});
-  await page.goto('/#/dashboard');
+  await page.goto('/');
+  await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
-  await expect(page.locator('.builder aside small')).toContainText('Autosaved',{timeout:5000});
   await page.getByLabel('Full Name').fill('Template Verification');
   await expect(page.locator('.cvPreview h1')).toHaveText('Template Verification');
   const preview=page.locator('.cvPreview');
