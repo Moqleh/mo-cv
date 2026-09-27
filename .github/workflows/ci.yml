@@ -28,4 +28,8 @@ jobs:
         run: npx playwright test -g "landing language"
       - name: E2E landing legal
         run: npx playwright test -g "landing legal"
+      - name: E2E password recovery route
+        run: npx playwright test -g "password recovery link"
+      - name: E2E English dashboard and templates
+        run: npx playwright test -g "English dashboard and builder"
       - run: npm audit --audit-level=critical
