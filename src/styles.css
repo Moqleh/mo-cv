@@ -311,3 +311,5 @@ main[lang="ar"]{direction:rtl}
 @media print{
  .cvPreview.classic,.cvPreview.professional,.cvPreview.modern,.cvPreview.creative,.cvPreview.elegant{box-shadow:none!important}
 }
+
+.previewColumn{min-width:0}.cvIssueActions{margin:14px 0 24px;display:grid;gap:10px}.reportIssueButton{justify-self:center}.issueReport{display:grid;gap:10px;padding:16px;border:1px solid #dbe4f0;border-radius:14px;background:#fff;box-shadow:0 8px 28px rgba(15,23,42,.08)}.issueReport select,.issueReport textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff}.issueReport .primary{justify-self:start}@media print{.cvIssueActions,.finalReviewNotice,.atsPanel,.builder aside,.builder .editor,.globalLocale{display:none!important}.previewColumn{display:block!important}}
