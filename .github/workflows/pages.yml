@@ -30,7 +30,8 @@ jobs:
           missing=0
           test -n "$VITE_SUPABASE_URL" || { echo "::warning::Missing VITE_SUPABASE_URL — cloud auth/persistence remain disabled"; missing=1; }
           test -n "$VITE_SUPABASE_ANON_KEY" || { echo "::warning::Missing VITE_SUPABASE_ANON_KEY — cloud auth/persistence remain disabled"; missing=1; }
-          test -n "$VITE_AI_ENDPOINT" || { echo "::warning::Missing VITE_AI_ENDPOINT — AI enhancement remains disabled"; missing=1; }\n          test -n "$VITE_MODERATION_ENDPOINT" || { echo "::error::Missing VITE_MODERATION_ENDPOINT — secure export cannot be enabled"; exit 1; }
+          test -n "$VITE_AI_ENDPOINT" || { echo "::warning::Missing VITE_AI_ENDPOINT — AI enhancement remains disabled"; missing=1; }
+          test -n "$VITE_MODERATION_ENDPOINT" || { echo "::error::Missing VITE_MODERATION_ENDPOINT — secure export cannot be enabled"; exit 1; }
           if test -n "$VITE_SUPABASE_URL"; then case "$VITE_SUPABASE_URL" in https://*) ;; *) echo "::error::VITE_SUPABASE_URL must use HTTPS"; exit 1;; esac; fi
           if test -n "$VITE_AI_ENDPOINT"; then case "$VITE_AI_ENDPOINT" in https://*) ;; *) echo "::error::VITE_AI_ENDPOINT must use HTTPS"; exit 1;; esac; fi
           if test "$missing" -eq 1; then echo "Production services are not fully configured; deploying the static fallback only."; fi
