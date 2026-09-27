@@ -16,8 +16,8 @@ test('password recovery link opens the dedicated reset form',async({page})=>{
  await page.addInitScript(()=>localStorage.setItem('mocv.locale','en'));
  await page.goto('/?recovery=1');
  await expect(page.getByRole('heading',{name:'Set a New Password'})).toBeVisible();
- await expect(page.getByLabel('New Password')).toBeVisible();
- await expect(page.getByLabel('Confirm New Password')).toBeVisible();
+ await expect(page.getByLabel('New Password',{exact:true})).toBeVisible();
+ await expect(page.getByLabel('Confirm New Password',{exact:true})).toBeVisible();
  await expect(page.getByRole('button',{name:/Update Password/})).toBeVisible();
 });
 
