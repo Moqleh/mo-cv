@@ -3,7 +3,7 @@ import{test,expect}from'@playwright/test';
 test('AI-disabled core flow persists a resume and reaches PDF print',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'e2e@example.test',name:'E2E User'}));localStorage.setItem('mocv.locale','ar')});
   await page.goto('/');
-  await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
+  await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
   await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
   await page.getByRole('button',{name:/إنشاء (سيرة جديدة|الآن)/}).first().click();
   await expect(page.locator('.builder')).toBeVisible();
@@ -67,7 +67,7 @@ test('landing legal controls work',async({page})=>{
 test('final CV renders all professional sections and printable layout safely',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'final@example.test',name:'Final CV'}));localStorage.setItem('mocv.locale','en')});
   await page.goto('/');
-  await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
+  await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
   await page.getByLabel('Full Name').fill('Mohammed Al-Oqleh');
   await expect(page.locator('.cvPreview h1')).toHaveText('Mohammed Al-Oqleh');
@@ -110,7 +110,7 @@ test('final CV renders all professional sections and printable layout safely',as
 test('Arabic final CV preserves every entered field and RTL output',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'arabic@example.test',name:'Arabic CV'}));localStorage.setItem('mocv.locale','ar')});
   await page.goto('/');
-  await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
+  await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
   await page.getByRole('button',{name:/إنشاء (سيرة جديدة|الآن)/}).first().click();
   const p=page.locator('.cvPreview');
   await page.getByLabel('الاسم الكامل').fill('محمد العقلة');
@@ -130,7 +130,7 @@ test('Arabic final CV preserves every entered field and RTL output',async({page}
 test('all five templates preserve CV content in Arabic and English',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'templates@example.test',name:'Templates'}));localStorage.setItem('mocv.locale','en')});
   await page.goto('/');
-  await page.getByRole('button',{name:'جرّب المساعد الذكي الآن ✨'}).click();
+  await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
   await page.getByLabel('Full Name').fill('Template Verification');
   await expect(page.locator('.cvPreview h1')).toHaveText('Template Verification');
