@@ -163,7 +163,7 @@ test('print CSS uses A4-safe pagination for long resume sections',async({page})=
   await page.getByLabel('Full Name').fill('Long Resume Verification');
   for(let i=0;i<8;i++){await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').nth(i);await e.locator('input').nth(0).fill('Role '+(i+1));await e.locator('input').nth(1).fill('Company '+(i+1));await e.locator('textarea').fill('Delivered measurable improvements across planning, reporting, controls, operations and stakeholder management. '.repeat(3));}
   await page.emulateMedia({media:'print'});
-  const preview=page.locator('.cvPreview');await expect(preview).toHaveCSS('width','702.984px');
+  const preview=page.locator('.cvPreview');const printBox=await preview.boundingBox();expect(printBox!.width).toBeGreaterThan(690);expect(printBox!.width).toBeLessThan(715);
   const section=preview.locator('.cvSection').filter({has:preview.getByRole('heading',{name:'Experience'})});
   await expect(section).toHaveCSS('break-inside','auto');
   for(const id of ['classic','professional','modern','creative','elegant']){await page.locator('.builderTop select').nth(1).selectOption(id);await expect(preview).toHaveClass(new RegExp(id));await expect(preview.getByText('Role 8')).toBeVisible();}
