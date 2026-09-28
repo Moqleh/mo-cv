@@ -209,3 +209,34 @@ test('required responsibility terms and CV issue reporting are visible and actio
   await expect(page.getByLabel('نوع المشكلة')).toBeVisible();
   await expect(page.getByRole('button',{name:'إرسال البلاغ'})).toBeVisible();
 });
+
+test('builder controls add edit reorder and remove every CV section safely',async({page})=>{
+ await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'controls-user',email:'controls@example.test',name:'Controls'}));localStorage.setItem('mocv.locale','en')});
+ await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+ await page.getByLabel('Resume name').fill('Global CV');
+ await page.getByLabel('Resume language').selectOption('en');
+ await page.getByLabel('Resume template').selectOption('professional');
+ await page.getByLabel('Full Name').fill('Global Candidate');await page.getByLabel('Job Title').fill('Senior Professional');
+ const cases=[['Add Experience','Job Title'],['Add Education','Degree'],['Add Certification','Certification Name'],['Add Project','Project Name'],['Add Course','Course Name']] as const;
+ for(const [button,placeholder] of cases){await page.getByRole('button',{name:button}).click();await expect(page.getByPlaceholder(placeholder).last()).toBeVisible();}
+ await page.getByRole('button',{name:'Add Language'}).click();await expect(page.getByRole('textbox',{name:'Language'})).toHaveCount(1);
+ await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\nLeadership');
+ const order=page.locator('.sectionOrder>div');const firstBefore=await order.first().innerText();await order.first().getByRole('button').nth(1).click();expect(await order.first().innerText()).not.toBe(firstBefore);
+ for(const id of ['classic','professional','modern','creative','elegant']){await page.getByLabel('Resume template').selectOption(id);await expect(page.locator('.cvPreview')).toHaveClass(new RegExp(id));}
+ await page.getByRole('button',{name:'Remove language'}).click();await expect(page.getByRole('textbox',{name:'Language'})).toHaveCount(0);
+ const trash=page.locator('.entry button');while(await trash.count())await trash.first().click();
+ await expect(page.locator('.entry')).toHaveCount(0);
+});
+
+test('final CV formats dates bullets and safe contact links professionally',async({page})=>{
+ await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'output-user',email:'output@example.test',name:'Output'}));localStorage.setItem('mocv.locale','en')});
+ await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();await page.getByLabel('Resume language').selectOption('en');
+ await page.getByLabel('Full Name').fill('Jane Executive');await page.getByLabel('Job Title').fill('Chief Financial Officer');await page.getByLabel('Email').fill('jane@example.com');await page.getByLabel('Website').fill('https://example.com');await page.getByLabel('LinkedIn').fill('https://linkedin.com/in/jane');
+ await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').first();await e.getByPlaceholder('Job Title').fill('Finance Director');await e.getByPlaceholder('Company').fill('Global Company');await e.getByLabel('Start date').fill('2024-01');await e.getByLabel('End date').fill('2026-09');await e.getByPlaceholder('Achievements').fill('Improved margin by 12%\nReduced close cycle by 4 days');
+ const p=page.locator('.cvPreview');await expect(p.getByText('Jan 2024 – Sep 2026')).toBeVisible();await expect(p.locator('.achievementList li')).toHaveCount(2);await expect(p.locator('a[href="mailto:jane@example.com"]')).toBeVisible();await expect(p.locator('a[href="https://example.com"]')).toBeVisible();await expect(p.locator('a[href="https://linkedin.com/in/jane"]')).toBeVisible();
+});
+
+test('export rejects malformed links and impossible date ranges',async({page})=>{
+ await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'validation-user',email:'validation@example.test',name:'Validation'}));localStorage.setItem('mocv.locale','en')});
+ await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();await page.getByLabel('Full Name').fill('Validation User');await page.getByLabel('Job Title').fill('Manager');await page.getByLabel('Website').fill('javascript:alert(1)');await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').first();await e.getByLabel('Start date').fill('2026-09');await e.getByLabel('End date').fill('2025-01');await page.getByRole('checkbox').last().check();await page.getByRole('button',{name:/PDF/}).click();await expect(page.getByRole('status').first()).toContainText(/valid links|روابط صحيحة/);await expect(page.locator('.cvPreview a[href^="javascript:"]')).toHaveCount(0);
+});
