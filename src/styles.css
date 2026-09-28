@@ -342,3 +342,6 @@ main[lang="ar"]{direction:rtl}
 
 .editorStatus{display:none}
 @media(max-width:700px){.editorStatus{display:block;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#f5f8fc;color:#17345f;font-size:13px;line-height:1.5}}
+
+/* Print pagination: sections may span pages; individual entries stay together. */
+@media print{.cvPreview .cvSection{break-inside:auto!important;page-break-inside:auto!important}.cvPreview .cvSection>article,.cvPreview .skillTags,.cvPreview .languageList{break-inside:avoid;page-break-inside:avoid}.cvPreview h3{break-after:avoid-page;page-break-after:avoid}}
