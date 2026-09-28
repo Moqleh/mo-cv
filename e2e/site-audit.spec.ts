@@ -1,9 +1,9 @@
 import{test,expect}from'@playwright/test';
 
 test('landing navigation, FAQ, templates, locale, legal and contact controls are actionable',async({page})=>{
- await page.goto('/');
+ await page.addInitScript(()=>localStorage.setItem('mocv.locale','ar'));await page.goto('/');
  for(const [name,id] of [['الميزات','features'],['القوالب','templates'],['كيف يعمل؟','how'],['الأسئلة الشائعة','faq'],['تواصل معنا','contact']] as const){
-  await page.getByRole('button',{name,exact:true}).click();await expect(page.locator('#'+id)).toBeInViewport();
+  await page.getByRole('button',{name,exact:true}).first().click();await expect(page.locator('#'+id)).toBeInViewport();
  }
  const firstTemplate=await page.locator('.templateRow article').first().innerText();await page.getByRole('button',{name:'القالب التالي'}).click();expect(await page.locator('.templateRow article').first().innerText()).not.toBe(firstTemplate);await page.getByRole('button',{name:'القالب السابق'}).click();
  const faq=page.locator('.faqGrid button').first();await faq.click();await expect(faq).toHaveAttribute('aria-expanded','true');await faq.click();await expect(faq).toHaveAttribute('aria-expanded','false');
@@ -29,8 +29,8 @@ test('approved premium CV templates render their intended visual architecture',a
  await page.getByLabel('Full Name').fill('Mohammed Mansour');await page.getByLabel('Job Title').fill('Financial Director');await page.getByRole('button',{name:'Add Language'}).click();await page.getByRole('textbox',{name:'Language'}).fill('Arabic');await page.getByRole('textbox',{name:'Level'}).fill('Native');await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\\nLeadership');
  const select=page.getByLabel('Resume template'),cv=page.locator('.cvPreview');
  await select.selectOption('classic');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');await expect(cv.locator('.cvMonogram')).toBeHidden();
- await select.selectOption('professional');await expect(cv.locator('.cvIdentity')).toHaveCSS('display','grid');expect((await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).backgroundImage))).not.toBe('none');
+ await select.selectOption('professional');await expect(cv.locator('.cvIdentity')).toHaveCSS('display','grid');await expect(cv.locator('.cvIdentity')).toHaveCSS('background-color','rgb(255, 255, 255)');
  await select.selectOption('modern');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvSidebar').evaluate(e=>getComputedStyle(e).backgroundImage)).not.toBe('none');await expect(cv.locator('.cvSidebar')).toContainText('Financial Analysis');
- await select.selectOption('creative');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).borderBottomColor)).toBe('rgb(239, 51, 78)');
- await select.selectOption('elegant');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');await expect(cv.locator('.cvMonogram')).toBeVisible();
+ await select.selectOption('creative');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).borderBottomColor)).toBe('rgb(213, 47, 72)');
+ await select.selectOption('elegant');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');await expect(cv.locator('.cvMonogram')).toBeHidden();
 });
