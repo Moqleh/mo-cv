@@ -86,8 +86,9 @@ test('final CV renders all professional sections and printable layout safely',as
   await page.getByRole('button',{name:'Add Certification'}).click();
   await page.getByRole('button',{name:'Add Project'}).click();
   await page.getByRole('button',{name:'Add Course'}).click();
-  await page.getByPlaceholder('e.g. Excel, Financial Analysis, Leadership').fill('Financial Analysis, Leadership, Budgeting, Reporting');
-  await page.getByPlaceholder('e.g. Arabic: Native, English: Advanced').fill('Arabic: Native, English: Advanced');
+  await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\nLeadership\nBudgeting\nReporting');
+  await page.getByRole('button',{name:'Add Language'}).click(); await page.getByLabel('Language').first().fill('Arabic'); await page.getByLabel('Level').first().fill('Native');
+  await page.getByLabel('Language').nth(1).fill('English'); await page.getByLabel('Level').nth(1).fill('Advanced');
   const preview=page.locator('.cvPreview');
   await expect(preview.getByText('Mohammed Al-Oqleh')).toBeVisible();
   await expect(preview.getByRole('heading',{name:'Professional Summary'})).toBeVisible();
