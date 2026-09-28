@@ -34,6 +34,6 @@ function Preview({r}:{r:ResumeV1}){
  ].filter(Boolean);
  return <section dir={r.locale==='ar'?'rtl':'ltr'} lang={r.locale} className={'cvPreview '+t.className+' density-'+t.density+' accent-'+t.accent}>
   <header className="cvIdentity"><div className="cvMonogram" aria-hidden="true">{initials||'CV'}</div><div className="cvNameBlock"><h1>{clean(r.personal.fullName)||(en?'Your Name':'اسمك الكامل')}</h1><h2>{clean(r.personal.jobTitle)||(en?'Professional Title':'المسمى المهني')}</h2></div>{contactItems.length>0&&<div className="contact">{contactItems.map((x,i)=><span key={i}>{x}{i<contactItems.length-1&&<i>•</i>}</span>)}</div>}</header>
-  <div className="cvBody">{r.sectionOrder.map(k=><div className="cvSection" data-section={k} key={k}>{blocks[k]}</div>)}</div>
+  <div className="cvBody"><div className="cvMain">{r.sectionOrder.filter(k=>k!=='skills'&&k!=='languages').map(k=><div className="cvSection" data-section={k} key={k}>{blocks[k]}</div>)}</div><aside className="cvSidebar">{r.sectionOrder.filter(k=>k==='skills'||k==='languages').map(k=><div className="cvSection" data-section={k} key={k}>{blocks[k]}</div>)}</aside></div>
  </section>
 }
