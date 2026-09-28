@@ -1,4 +1,4 @@
-import{createClient}from'https://esm.sh/@supabase/supabase-js@2.45.4';
+import{createClient}from'https://esm.sh/@supabase/supabase-js@2.117.2';
 const json=(body:unknown,status=200,cors:Record<string,string>={})=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json'}});
 async function hashText(s:string){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 Deno.serve(async req=>{
