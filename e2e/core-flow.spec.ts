@@ -259,3 +259,15 @@ test('dashboard localizes legacy default resume titles without translating user 
  const legacy=page.locator('.resumeGrid article').filter({has:page.getByRole('heading',{name:'My Resume'})});
  if(await legacy.count())await expect(legacy.first()).toBeVisible();
 });
+
+
+test('dashboard locale switch keeps one consistent UI',async({page})=>{
+ await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'locale-user',email:'user@test.invalid',name:'Locale'}));localStorage.setItem('mocv.locale','ar');localStorage.removeItem('mocv.resumes.v1')});
+ await page.goto('/#/dashboard');
+ await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
+ await page.locator('.globalLocale').click();
+ await expect(page.getByRole('heading',{name:'Your Resumes'})).toBeVisible();
+ await page.getByRole('button',{name:'Create New Resume'}).click();
+ await expect(page.getByLabel('Resume name')).toHaveValue('My Resume');
+ await expect(page.getByLabel('Resume language')).toHaveValue('en');
+});
