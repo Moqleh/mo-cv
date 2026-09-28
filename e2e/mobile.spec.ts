@@ -44,3 +44,16 @@ test('mobile dashboard stays inside viewport in English and Arabic',async({page}
   await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
   const overflowAr=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflowAr).toBeLessThanOrEqual(2);
 });
+
+
+test('mobile English builder keeps all controls English even for an Arabic resume',async({page})=>{
+  await page.addInitScript(()=>{const r={schemaVersion:1,id:'mixed-locale',title:'سيرتي الذاتية',locale:'ar',template:'professional',updatedAt:new Date().toISOString(),personal:{fullName:'',jobTitle:'',email:'',phone:'',location:'',website:'',linkedin:''},summary:'',experience:[],education:[],skills:[],languages:[],certifications:[],projects:[],courses:[],sectionOrder:['summary','experience','education','skills','languages','certifications','projects','courses']};localStorage.setItem('mocv.dev.user',JSON.stringify({id:'mixed-user',email:'mixed@test.invalid',name:'Mixed'}));localStorage.setItem('mocv.locale','en');localStorage.setItem('mocv.resumes.v1',JSON.stringify([r]))});
+  await page.goto('/#/dashboard');
+  await page.getByRole('button',{name:'Edit'}).first().click();
+  await expect(page.getByLabel('Resume name')).toHaveValue('My Resume');
+  await expect(page.getByLabel('Resume language')).toHaveValue('ar');
+  await expect(page.getByLabel('Resume template').locator('option:checked')).toHaveText('Professional');
+  await expect(page.getByRole('button',{name:/Save/})).toBeVisible();
+  await expect(page.getByText('Notice before finalizing your resume')).toBeVisible();
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflow).toBeLessThanOrEqual(2);
+});
