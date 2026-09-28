@@ -29,4 +29,4 @@ jobs:
           name: playwright-diagnostics
           path: test-results
           if-no-files-found: ignore
-      - run: npm audit --audit-level=critical
+      - run: npm audit --audit-level=high
