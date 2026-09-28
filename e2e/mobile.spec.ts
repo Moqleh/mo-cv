@@ -29,5 +29,5 @@ test('mobile PDF check always returns control to the user',async({page})=>{
   const pdf=page.getByRole('button',{name:/PDF/});
   await pdf.click();
   await expect(pdf).toBeEnabled({timeout:9000});
-  await expect(page.getByRole('status')).toContainText('press PDF to retry',{timeout:9000});
+  await expect(page.locator('.statusLive').first()).toContainText('press PDF to retry',{timeout:9000});
 });
