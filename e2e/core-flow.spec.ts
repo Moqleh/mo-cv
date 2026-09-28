@@ -160,6 +160,7 @@ test('print CSS uses A4-safe pagination for long resume sections',async({page})=
   await page.goto('/');
   await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await page.locator('.builderTop select').first().selectOption('en');
   await page.getByLabel('Full Name').fill('Long Resume Verification');
   for(let i=0;i<8;i++){await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').nth(i);await e.locator('input').nth(0).fill('Role '+(i+1));await e.locator('input').nth(1).fill('Company '+(i+1));await e.locator('textarea').fill('Delivered measurable improvements across planning, reporting, controls, operations and stakeholder management. '.repeat(3));}
   await page.emulateMedia({media:'print'});
