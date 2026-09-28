@@ -221,8 +221,7 @@ test('builder controls add edit reorder and remove every CV section safely',asyn
  const cases=[['Add Experience','Job Title'],['Add Education','Degree'],['Add Certification','Certification Name'],['Add Project','Project Name'],['Add Course','Course Name']] as const;
  for(const [button,placeholder] of cases){await page.getByRole('button',{name:button}).click();await expect(page.getByPlaceholder(placeholder).last()).toBeVisible();}
  await page.getByRole('button',{name:'Add Language'}).click();await expect(page.getByRole('textbox',{name:'Language'})).toHaveCount(1);
- await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis
-Leadership');
+ await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\\nLeadership');
  const order=page.locator('.sectionOrder>div');const firstBefore=await order.first().innerText();await order.first().getByRole('button').nth(1).click();expect(await order.first().innerText()).not.toBe(firstBefore);
  for(const id of ['classic','professional','modern','creative','elegant']){await page.getByLabel('Resume template').selectOption(id);await expect(page.locator('.cvPreview')).toHaveClass(new RegExp(id));}
  await page.getByRole('button',{name:'Remove language'}).click();await expect(page.getByRole('textbox',{name:'Language'})).toHaveCount(0);
