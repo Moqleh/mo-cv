@@ -271,3 +271,27 @@ test('dashboard locale switch keeps one consistent UI',async({page})=>{
  await expect(page.getByLabel('Resume name')).toHaveValue('My Resume');
  await expect(page.getByLabel('Resume language')).toHaveValue('en');
 });
+
+
+test('English UI keeps builder chrome English even when the resume content language is Arabic',async({page})=>{
+ await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'locale-parity-user',email:'locale@example.test',name:'Locale'}));localStorage.setItem('mocv.locale','en')});
+ await page.goto('/#/dashboard');
+ await page.getByRole('button',{name:/Create New Resume/}).first().click();
+ await expect(page.getByLabel('Resume name')).toBeVisible();
+ await expect(page.getByLabel('Resume language')).toBeVisible();
+ await expect(page.getByLabel('Resume template')).toBeVisible();
+ await page.getByLabel('Resume language').selectOption('ar');
+ await expect(page.getByLabel('Resume template').locator('option').filter({hasText:'Professional'})).toHaveCount(1);
+ await expect(page.getByLabel('Resume template').locator('option').filter({hasText:'احترافي'})).toHaveCount(0);
+ await expect(page.getByLabel('Resume name')).toHaveValue(/My Resume|New Resume/);
+});
+
+test('Arabic and English builder top controls keep the same mobile structure',async({page})=>{
+ await page.setViewportSize({width:412,height:915});
+ await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'mobile-parity-user',email:'mobile@example.test',name:'Mobile'}));localStorage.setItem('mocv.locale','en')});
+ await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create New Resume/}).first().click();
+ const english=await page.locator('.builderTop .builderControl').count();expect(english).toBe(3);
+ await page.getByRole('button',{name:/Switch to Arabic|Arabic/}).first().click();
+ const arabic=await page.locator('.builderTop .builderControl').count();expect(arabic).toBe(3);
+ await expect(page.locator('body')).not.toHaveCSS('overflow-x','scroll');
+});
