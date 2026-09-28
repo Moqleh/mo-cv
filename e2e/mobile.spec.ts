@@ -23,7 +23,7 @@ test('mobile PDF check always returns control to the user',async({page})=>{
   await page.goto('/');
   await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
-  await page.getByLabel('Full Name').fill('Mobile PDF Test');
+  await page.getByLabel('Full Name').fill('Mobile PDF Test');\n  await page.getByLabel('Job Title').fill('Finance Manager');
   await page.getByRole('checkbox').check();
   await page.route('**/functions/v1/cv-moderate',route=>route.abort());
   const pdf=page.getByRole('button',{name:/PDF/});
