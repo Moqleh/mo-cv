@@ -16,11 +16,11 @@ test('landing navigation, FAQ, templates, locale, legal and contact controls are
 
 test('dashboard primary actions create, rename, duplicate, edit and delete a resume',async({page})=>{
  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'audit-user',email:'audit@example.test',name:'Audit'}));localStorage.setItem('mocv.locale','en')});
- await page.goto('/#/dashboard');await page.getByRole('button',{name:'Create New Resume'}).click();await expect(page.getByLabel('Resume name')).toBeVisible();await page.getByLabel('Resume name').fill('Executive CV');await page.getByRole('button',{name:'Home'}).first().click();
+ await page.goto('/#/dashboard');await page.getByRole('button',{name:'Create New Resume'}).click();await expect(page.getByLabel('Resume name')).toBeVisible();await page.getByLabel('Resume name').fill('Executive CV');await page.getByRole('button',{name:'Dashboard'}).first().click();
  await expect(page.getByText('Executive CV')).toBeVisible();
  page.once('dialog',async d=>{expect(d.type()).toBe('prompt');await d.accept('Executive CV 2026')});await page.getByRole('button',{name:'Rename'}).click();await expect(page.getByText('Executive CV 2026')).toBeVisible();
  await page.getByRole('button',{name:'Duplicate'}).click();await expect(page.locator('.resumeGrid article')).toHaveCount(2);
- const first=page.locator('.resumeGrid article').first();await first.getByRole('button',{name:'Edit'}).click();await expect(page.locator('.cvPreview')).toBeVisible();await page.getByRole('button',{name:'Home'}).first().click();
+ const first=page.locator('.resumeGrid article').first();await first.getByRole('button',{name:'Edit'}).click();await expect(page.locator('.cvPreview')).toBeVisible();await page.getByRole('button',{name:'Dashboard'}).first().click();
  page.once('dialog',async d=>{expect(d.type()).toBe('confirm');await d.accept()});await page.locator('.resumeGrid article').first().getByRole('button',{name:'Delete'}).click();await expect(page.locator('.resumeGrid article')).toHaveCount(1);
 });
 
