@@ -108,5 +108,8 @@ jobs:
           test "$MOD_STATUS" = "401"
           DELETE_STATUS="$(curl --silent --output /tmp/delete.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/delete-account" -H "Content-Type: application/json")"
           test "$DELETE_STATUS" = "401"
+          BREACH_STATUS="$(curl --silent --output /tmp/breach.json --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/password-breach-check" -H "Content-Type: application/json" --data '{"sha1":"5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8"}')"
+          test "$BREACH_STATUS" = "200"
+          grep -Fq '"pwned":true' /tmp/breach.json
           BREACH_JSON="$(curl --fail --silent --show-error -X POST "$SUPABASE_URL/functions/v1/password-breach-check" -H "Content-Type: application/json" -H "apikey: $SUPABASE_PUBLISHABLE_KEY" --data '{"sha1":"5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8"}')"
           grep -Fq '"pwned":true' <<<"$BREACH_JSON"
