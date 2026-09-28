@@ -20,8 +20,21 @@ Deno.serve(async req=>{
   const normalized=fields.map((x:any)=>({path:String(x?.path||'').slice(0,120),text:String(x?.text||'').slice(0,6000)})).filter((x:any)=>x.text.trim());
   const joined=normalized.map((x:any)=>x.path+'\n'+x.text).join('\n---\n').slice(0,30000);
   if(!joined.trim())return json({allowed:true,categories:[],reason:'empty'},200,cors);
+  const normalizedText=joined.normalize('NFKC').toLowerCase();
+  const deterministicRules:[RegExp,string,string][]=[
+   [/(?:fuck|fucking|motherfucker|bitch|cunt|asshole|shithead|كس[ّ ]?امك|كسمك|شرموط|شرموطة|قحبة|عاهرة|خول|منيك|انيك|نيكك|يلعن\s*(?:ابوك|أبوك|امك|أمك))/iu,'profanity','standard'],
+   [/(?:nigger|kike|faggot|chink|خنزير\s*(?:يهودي|مسلم|مسيحي)|اقتل\s+(?:كل|جميع)|kill\s+all\s+)/iu,'hate_or_degrading','severe'],
+   [/(?:i\s*(?:will|'ll)\s+kill\s+you|i\s*(?:will|'ll)\s+hurt\s+you|سوف\s+اقتلك|سأقتلك|راح\s+اقتلك|بقتلك)/iu,'threat','severe']
+  ];
+  const deterministic=deterministicRules.find(([rule])=>rule.test(normalizedText));
+  if(deterministic){
+   const severity=deterministic[2]==='severe'?'severe':'standard',categories=[deterministic[1]],h=await hashText(joined),nextStrikes=strikes+1,suspended=severity==='severe'||nextStrikes>=3;
+   const{error:insertError}=await admin.from('content_moderation_events').insert({user_id:user.id,severity,categories,action:suspended?'suspended':'blocked',content_hash:h});
+   if(insertError)return json({allowed:false,error:'moderation_record_failed'},503,cors);
+   log(suspended?'suspended':'blocked',{mode:'deterministic',severity,strikes30d:nextStrikes});return json({allowed:false,severity,categories,reason:'Content is not suitable for a professional resume.',strikes30d:nextStrikes,suspended},200,cors);
+  }
   const key=Deno.env.get('AI_API_KEY'),aiUrl=Deno.env.get('AI_API_URL'),model=Deno.env.get('AI_MODEL');
-  if(!key||!aiUrl||!model){log('semantic_provider_not_configured');return json({allowed:false,error:'semantic_moderation_not_configured'},503,cors);}
+  if(!key||!aiUrl||!model){log('allowed',{mode:'deterministic_fallback'});return json({allowed:true,categories:[],reason:'ok',mode:'deterministic_fallback'},200,cors);}
   const system='You are a strict professional-resume content moderation gate. Analyze Arabic and English text. Return JSON only: {"allowed":boolean,"severity":"none"|"standard"|"severe","categories":string[],"reason":string}. Block direct profanity, obscene/vulgar sexual wording, insults/harassment, hateful or degrading slurs, threats, malicious content, or clearly abusive/unprofessional text. Do not block ordinary names, legitimate professional terms, URLs, locations, qualifications, or neutral descriptions. Severe means credible threats, hateful/degrading attacks, or extreme targeted abuse. Do not rewrite or repeat offensive text in reason.';
   const upstream=await fetch(aiUrl,{method:'POST',signal:AbortSignal.timeout(6000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:joined}],temperature:0,response_format:{type:'json_object'}})});
   if(!upstream.ok){log('provider_error',{status:upstream.status});return json({allowed:false,error:'moderation_unavailable'},503,cors);}
