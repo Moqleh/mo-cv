@@ -82,8 +82,14 @@ test('final CV renders all professional sections and printable layout safely',as
   await entry.locator('input').nth(0).fill('Finance Manager');
   await entry.locator('input').nth(1).fill('Example Company');
   await entry.locator('textarea').fill('Led planning, reporting and process improvement initiatives with measurable outcomes.');
-  await page.getByRole('button',{name:'Add Education'}).click(); await page.getByPlaceholder('Degree').fill('MBA'); await page.getByPlaceholder('School').fill('Global University');\n  await page.getByRole('button',{name:'Add Certification'}).click(); await page.getByPlaceholder('Certification Name').fill('CMA');\n  await page.getByRole('button',{name:'Add Project'}).click(); await page.getByPlaceholder('Project Name').fill('Transformation Program');\n  await page.getByRole('button',{name:'Add Course'}).click(); await page.getByPlaceholder('Course Name').fill('Executive Leadership');
-  await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\nLeadership\nBudgeting\nReporting');
+  await page.getByRole('button',{name:'Add Education'}).click(); await page.getByPlaceholder('Degree').fill('MBA'); await page.getByPlaceholder('School').fill('Global University');
+  await page.getByRole('button',{name:'Add Certification'}).click(); await page.getByPlaceholder('Certification Name').fill('CMA');
+  await page.getByRole('button',{name:'Add Project'}).click(); await page.getByPlaceholder('Project Name').fill('Transformation Program');
+  await page.getByRole('button',{name:'Add Course'}).click(); await page.getByPlaceholder('Course Name').fill('Executive Leadership');
+  await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis
+Leadership
+Budgeting
+Reporting');
   await page.getByRole('button',{name:'Add Language'}).click(); await page.getByRole('textbox',{name:'Language'}).fill('Arabic'); await page.getByRole('textbox',{name:'Level'}).fill('Native');
   await page.getByRole('button',{name:'Add Language'}).click(); const languageFields=page.getByRole('textbox',{name:'Language'}); const levelFields=page.getByRole('textbox',{name:'Level'}); await languageFields.nth(1).fill('English'); await levelFields.nth(1).fill('Advanced');
   const preview=page.locator('.cvPreview');
@@ -122,7 +128,8 @@ test('Arabic final CV preserves every entered field and RTL output',async({page}
   await page.locator('.editor>textarea').first().fill('ملخص مهني عربي شامل.');
   await expect(p).toHaveAttribute('dir','rtl');
   await expect(p).toHaveAttribute('lang','ar');
-  for(const value of ['محمد العقلة','مدير مالي','arabic@example.com','+966500000001','الرياض، السعودية','ملخص مهني عربي شامل.']) await expect(p.getByText(value,{exact:false})).toBeVisible();\n  await expect(p.locator('a[href="https://example.com"]')).toBeVisible();await expect(p.locator('a[href="https://linkedin.com/in/example"]')).toBeVisible();
+  for(const value of ['محمد العقلة','مدير مالي','arabic@example.com','+966500000001','الرياض، السعودية','ملخص مهني عربي شامل.']) await expect(p.getByText(value,{exact:false})).toBeVisible();
+  await expect(p.locator('a[href="https://example.com"]')).toBeVisible();await expect(p.locator('a[href="https://linkedin.com/in/example"]')).toBeVisible();
   for(const heading of ['الملخص المهني']) await expect(p.getByRole('heading',{name:heading})).toBeVisible();
 });
 
@@ -217,7 +224,8 @@ test('builder controls add edit reorder and remove every CV section safely',asyn
  const cases=[['Add Experience','Job Title'],['Add Education','Degree'],['Add Certification','Certification Name'],['Add Project','Project Name'],['Add Course','Course Name']] as const;
  for(const [button,placeholder] of cases){await page.getByRole('button',{name:button}).click();await expect(page.getByPlaceholder(placeholder).last()).toBeVisible();}
  await page.getByRole('button',{name:'Add Language'}).click();await expect(page.getByRole('textbox',{name:'Language'})).toHaveCount(1);
- await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\nLeadership');
+ await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis
+Leadership');
  const order=page.locator('.sectionOrder>div');const firstBefore=await order.first().innerText();await order.first().getByRole('button').nth(1).click();expect(await order.first().innerText()).not.toBe(firstBefore);
  for(const id of ['classic','professional','modern','creative','elegant']){await page.getByLabel('Resume template').selectOption(id);await expect(page.locator('.cvPreview')).toHaveClass(new RegExp(id));}
  await page.getByRole('button',{name:'Remove language'}).click();await expect(page.getByRole('textbox',{name:'Language'})).toHaveCount(0);
@@ -229,7 +237,8 @@ test('final CV formats dates bullets and safe contact links professionally',asyn
  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'output-user',email:'output@example.test',name:'Output'}));localStorage.setItem('mocv.locale','en')});
  await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();await page.getByLabel('Resume language').selectOption('en');
  await page.getByLabel('Full Name').fill('Jane Executive');await page.getByLabel('Job Title').fill('Chief Financial Officer');await page.getByLabel('Email').fill('jane@example.com');await page.getByLabel('Website').fill('https://example.com');await page.getByLabel('LinkedIn').fill('https://linkedin.com/in/jane');
- await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').first();await e.getByPlaceholder('Job Title').fill('Finance Director');await e.getByPlaceholder('Company').fill('Global Company');await e.getByLabel('Start date').fill('2024-01');await e.getByLabel('End date').fill('2026-09');await e.getByPlaceholder('Achievements').fill('Improved margin by 12%\nReduced close cycle by 4 days');
+ await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').first();await e.getByPlaceholder('Job Title').fill('Finance Director');await e.getByPlaceholder('Company').fill('Global Company');await e.getByLabel('Start date').fill('2024-01');await e.getByLabel('End date').fill('2026-09');await e.getByPlaceholder('Achievements').fill('Improved margin by 12%
+Reduced close cycle by 4 days');
  const p=page.locator('.cvPreview');await expect(p.getByText('Jan 2024 – Sep 2026')).toBeVisible();await expect(p.locator('.achievementList li')).toHaveCount(2);await expect(p.locator('a[href="mailto:jane@example.com"]')).toBeVisible();await expect(p.locator('a[href="https://example.com"]')).toBeVisible();await expect(p.locator('a[href="https://linkedin.com/in/jane"]')).toBeVisible();
 });
 
