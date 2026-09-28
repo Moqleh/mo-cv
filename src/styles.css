@@ -493,3 +493,19 @@ main[lang="ar"]{direction:rtl}
 .cvPreview[dir="rtl"] .entryHeading{direction:rtl}.cvPreview[dir="rtl"] .contact{direction:rtl}.cvPreview[dir="rtl"] .achievementList{text-align:right}
 @media(max-width:700px){.cvPreview{width:calc(100% - 24px);padding:24px 20px}.cvIdentity{grid-template-columns:54px 1fr;gap:12px}.cvMonogram{width:50px!important;height:50px!important;font-size:16px}.cvPreview h1{font-size:23px}.professional{padding:24px 20px!important}.modern,.creative{display:block!important;padding:0!important}.modern .cvIdentity,.creative .cvIdentity{grid-template-columns:58px 1fr!important;background:#fff!important;padding:22px 20px!important;border-bottom:3px solid var(--accent)}.modern .cvNameBlock,.modern .contact{grid-column:2}.modern .cvBody,.creative .cvBody{display:block!important}.modern .cvMain,.creative .cvMain{padding:8px 20px 24px}.modern .cvSidebar,.creative .cvSidebar{padding:8px 20px 24px;background:var(--soft);color:var(--ink)}.modern .cvSidebar h3{color:var(--ink);border-color:#bcdcff!important}.modern .cvSidebar .skillTags{display:flex}.modern .cvSidebar .skillTags span,.modern .cvSidebar .languageList span{color:#234468;border-color:#dce9f6;background:#fff}.elegant{padding:28px 22px!important}.entryHeading{align-items:flex-start}.languageList{grid-template-columns:1fr}}
 @media print{.cvPreview{width:186mm!important;min-height:273mm!important;border-radius:0!important;box-shadow:none!important}.cvPreview.professional{padding:10mm 11mm!important}.cvPreview.modern,.cvPreview.creative{padding:0!important}.cvPreview.elegant{padding:11mm 13mm!important}.cvPreview.classic{padding:10mm 11mm!important}.cvPreview .cvSection{break-inside:auto!important;page-break-inside:auto!important}.cvPreview article,.cvPreview .skillTags,.cvPreview .languageList{break-inside:avoid;page-break-inside:avoid}.cvPreview h3{break-after:avoid-page;page-break-after:avoid}}
+
+/* Mobile builder polish — compact workflow, actionable feedback, less legal-wall friction */
+@media(max-width:700px){
+ .editor{padding-top:72px}
+ .builderTop{gap:10px}
+ .builderTop input{min-height:54px;font-size:18px!important}
+ .builderTop select,.builderTop button{min-height:52px!important;border-radius:12px!important}
+ .builderTop button svg{width:22px;height:22px}
+ .editorStatus{margin:2px 0 10px;padding:11px 13px;border:1px solid #d8e6f5;background:#f7fbff;color:#27496f}
+ .editorStatus:empty{display:none}
+ .finalReviewNotice{padding:12px 14px!important;border-radius:14px!important;background:#f8fafc!important;border:1px solid #dbe4ee!important;color:#334155!important}
+ .finalReviewNotice strong{display:block;font-size:15px;margin-bottom:5px;color:#17243a}
+ .finalReviewNotice p{font-size:12.5px;line-height:1.65;margin:5px 0 10px!important;color:#52637a}
+ .finalReviewNotice label{font-size:13px;line-height:1.6;font-weight:600}
+ .atsPanel{border-radius:14px!important;background:#fbfdff!important}
+}
