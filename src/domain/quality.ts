@@ -31,8 +31,12 @@ export function validateProfessionalContent(r:ResumeV1,locale:'ar'|'en'=r.locale
   const tr=(ar:string,en:string)=>locale==='ar'?ar:en;
   const issues:string[]=[];
   const fields=resumeTextFields(r);
-  if(!r.personal.fullName.trim())issues.push(tr('أدخل الاسم الكامل قبل التصدير','Enter the full name before export'));\n  if(!r.personal.jobTitle.trim())issues.push(tr('أدخل المسمى المهني قبل التصدير','Enter the professional title before export'));
-  if(r.personal.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.personal.email))issues.push(tr('صحح البريد الإلكتروني قبل التصدير','Correct the email address before export'));\n  const safeUrl=(v:string)=>!v.trim()||/^https?:\\/\\/[^\\s]+$/i.test(v.trim());\n  if(!safeUrl(r.personal.website)||!safeUrl(r.personal.linkedin)||r.certifications.some(x=>!safeUrl(x.url))||r.projects.some(x=>!safeUrl(x.url)))issues.push(tr('استخدم روابط صحيحة تبدأ بـ http:// أو https://','Use valid links beginning with http:// or https://'));\n  if(r.experience.some(x=>x.start&&x.end&&!x.current&&x.end<x.start)||r.education.some(x=>x.start&&x.end&&x.end<x.start))issues.push(tr('راجع التواريخ: تاريخ النهاية لا يمكن أن يسبق تاريخ البداية','Review dates: an end date cannot be before its start date'));
+  if(!r.personal.fullName.trim())issues.push(tr('أدخل الاسم الكامل قبل التصدير','Enter the full name before export'));
+  if(!r.personal.jobTitle.trim())issues.push(tr('أدخل المسمى المهني قبل التصدير','Enter the professional title before export'));
+  if(r.personal.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.personal.email))issues.push(tr('صحح البريد الإلكتروني قبل التصدير','Correct the email address before export'));
+  const safeUrl=(v:string)=>!v.trim()||/^https?:\/\/[^\s]+$/i.test(v.trim());
+  if(!safeUrl(r.personal.website)||!safeUrl(r.personal.linkedin)||r.certifications.some(x=>!safeUrl(x.url))||r.projects.some(x=>!safeUrl(x.url)))issues.push(tr('استخدم روابط صحيحة تبدأ بـ http:// أو https://','Use valid links beginning with http:// or https://'));
+  if(r.experience.some(x=>x.start&&x.end&&!x.current&&x.end<x.start)||r.education.some(x=>x.start&&x.end&&x.end<x.start))issues.push(tr('راجع التواريخ: تاريخ النهاية لا يمكن أن يسبق تاريخ البداية','Review dates: an end date cannot be before its start date'));
   if(fields.some(({text})=>profanity.some(rx=>rx.test(text))))issues.push(tr('احذف الألفاظ البذيئة أو الفاحشة قبل إنشاء السيرة النهائية','Remove profane or obscene language before creating the final resume'));
   if(fields.some(({text})=>directAbuse.some(rx=>rx.test(text))))issues.push(tr('احذف الإهانات أو الإساءة الشخصية قبل إنشاء السيرة النهائية','Remove insults or personal abuse before creating the final resume'));
   if(fields.some(({text})=>gibberish.test(text)))issues.push(tr('راجع النصوص العبثية أو الأحرف المكررة بشكل غير طبيعي','Review gibberish or unusually repeated characters'));
