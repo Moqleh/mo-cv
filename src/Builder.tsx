@@ -3,7 +3,7 @@ export default function Builder({id,uiLocale,onBack}:{id?:string;uiLocale:'ar'|'
 function Preview({r}:{r:ResumeV1}){
  const t=templateFor(r),en=r.locale==='en';
  const labels:Record<SectionKey,string>={summary:en?'Professional Summary':'الملخص المهني',experience:en?'Professional Experience':'الخبرات المهنية',education:en?'Education':'التعليم',certifications:en?'Certifications':'الشهادات المهنية',projects:en?'Selected Projects':'المشاريع المختارة',courses:en?'Professional Development':'التطوير المهني',skills:en?'Core Skills':'المهارات الأساسية',languages:en?'Languages':'اللغات'};
- const clean=(v:string)=>v.trim();const has=(...v:string[])=>v.some(x=>clean(x));
+ const clean=(v:string)=>v.trim();const has=(...v:string[])=>v.some(x=>clean(x));const safeUrl=(v:string)=>/^https?:\\/\\/[^\\s]+$/i.test(clean(v));
  const month=(v:string)=>{if(!v)return'';const m=/^(\\d{4})-(\\d{2})$/.exec(v);if(!m)return v;const d=new Date(Number(m[1]),Number(m[2])-1,1);return new Intl.DateTimeFormat(en?'en-US':'ar-SA',{month:'short',year:'numeric'}).format(d)};
  const range=(start:string,end:string,current=false)=>[month(start),current?(en?'Present':'حتى الآن'):month(end)].filter(Boolean).join(' – ');
  const lines=(v:string)=>v.split(/\\n+/).map(x=>x.trim().replace(/^[•·▪◦*-]+\\s*/, '')).filter(Boolean);
@@ -19,8 +19,8 @@ function Preview({r}:{r:ResumeV1}){
   summary:clean(r.summary)&&<><h3>{labels.summary}</h3><p className="summaryText">{clean(r.summary)}</p></>,
   experience:exp.length>0&&<><h3>{labels.experience}</h3>{exp.map(x=><article className="timelineEntry" key={x.id}><div className="entryHeading"><b>{clean(x.role)||clean(x.company)}</b>{range(x.start,x.end,x.current)&&<time>{range(x.start,x.end,x.current)}</time>}</div><span>{[clean(x.company)&&clean(x.company)!==clean(x.role)?clean(x.company):'',clean(x.location)].filter(Boolean).join(' • ')}</span><Description text={x.description}/></article>)}</>,
   education:edu.length>0&&<><h3>{labels.education}</h3>{edu.map(x=><article className="timelineEntry" key={x.id}><div className="entryHeading"><b>{[clean(x.degree),clean(x.field)].filter(Boolean).join(' — ')||clean(x.school)}</b>{range(x.start,x.end)&&<time>{range(x.start,x.end)}</time>}</div><span>{[clean(x.school),clean(x.location)].filter(Boolean).join(' • ')}</span><Description text={x.description}/></article>)}</>,
-  certifications:cert.length>0&&<><h3>{labels.certifications}</h3>{cert.map(x=><article key={x.id}><div className="entryHeading"><b>{clean(x.name)||clean(x.issuer)}</b>{month(x.date)&&<time>{month(x.date)}</time>}</div><span>{clean(x.issuer)}</span>{clean(x.url)&&<a className="cvLink" href={x.url} target="_blank" rel="noreferrer">{en?'Verify credential':'التحقق من الشهادة'}</a>}</article>)}</>,
-  projects:projects.length>0&&<><h3>{labels.projects}</h3>{projects.map(x=><article key={x.id}><div className="entryHeading"><b>{clean(x.name)||clean(x.role)}</b>{month(x.date)&&<time>{month(x.date)}</time>}</div><span>{clean(x.role)}</span><Description text={x.description}/>{clean(x.url)&&<a className="cvLink" href={x.url} target="_blank" rel="noreferrer">{en?'View project':'عرض المشروع'}</a>}</article>)}</>,
+  certifications:cert.length>0&&<><h3>{labels.certifications}</h3>{cert.map(x=><article key={x.id}><div className="entryHeading"><b>{clean(x.name)||clean(x.issuer)}</b>{month(x.date)&&<time>{month(x.date)}</time>}</div><span>{clean(x.issuer)}</span>{safeUrl(x.url)&&<a className="cvLink" href={x.url} target="_blank" rel="noreferrer">{en?'Verify credential':'التحقق من الشهادة'}</a>}</article>)}</>,
+  projects:projects.length>0&&<><h3>{labels.projects}</h3>{projects.map(x=><article key={x.id}><div className="entryHeading"><b>{clean(x.name)||clean(x.role)}</b>{month(x.date)&&<time>{month(x.date)}</time>}</div><span>{clean(x.role)}</span><Description text={x.description}/>{safeUrl(x.url)&&<a className="cvLink" href={x.url} target="_blank" rel="noreferrer">{en?'View project':'عرض المشروع'}</a>}</article>)}</>,
   courses:courses.length>0&&<><h3>{labels.courses}</h3>{courses.map(x=><article key={x.id}><div className="entryHeading"><b>{clean(x.name)||clean(x.provider)}</b>{month(x.date)&&<time>{month(x.date)}</time>}</div><span>{clean(x.provider)}</span></article>)}</>,
   skills:skills.length>0&&<><h3>{labels.skills}</h3><div className="skillTags">{skills.map((x,i)=><span key={x+'-'+i}>{x}</span>)}</div></>,
   languages:languages.length>0&&<><h3>{labels.languages}</h3><div className="languageList">{languages.map(x=><span key={x.id}><b>{clean(x.name)}</b>{clean(x.level)&&<> — {clean(x.level)}</>}</span>)}</div></>
@@ -29,8 +29,8 @@ function Preview({r}:{r:ResumeV1}){
   r.personal.email&&<a href={'mailto:'+r.personal.email}>{r.personal.email}</a>,
   r.personal.phone&&<a href={'tel:'+r.personal.phone.replace(/\\s/g,'')} dir="ltr">{r.personal.phone}</a>,
   r.personal.location&&<span>{r.personal.location}</span>,
-  r.personal.website&&<a href={r.personal.website} target="_blank" rel="noreferrer">{r.personal.website.replace(/^https?:\\/\\//,'')}</a>,
-  r.personal.linkedin&&<a href={r.personal.linkedin} target="_blank" rel="noreferrer">{r.personal.linkedin.replace(/^https?:\\/\\/(www\\.)?/,'')}</a>
+  safeUrl(r.personal.website)&&<a href={r.personal.website} target="_blank" rel="noreferrer">{r.personal.website.replace(/^https?:\\/\\//,'')}</a>,
+  safeUrl(r.personal.linkedin)&&<a href={r.personal.linkedin} target="_blank" rel="noreferrer">{r.personal.linkedin.replace(/^https?:\\/\\/(www\\.)?/,'')}</a>
  ].filter(Boolean);
  return <section dir={r.locale==='ar'?'rtl':'ltr'} lang={r.locale} className={'cvPreview '+t.className+' density-'+t.density+' accent-'+t.accent}>
   <header className="cvIdentity"><h1>{clean(r.personal.fullName)||(en?'Your Name':'اسمك الكامل')}</h1><h2>{clean(r.personal.jobTitle)||(en?'Professional Title':'المسمى المهني')}</h2>{contactItems.length>0&&<div className="contact">{contactItems.map((x,i)=><span key={i}>{x}{i<contactItems.length-1&&<i>•</i>}</span>)}</div>}</header>
