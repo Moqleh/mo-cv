@@ -57,3 +57,17 @@ test('mobile English builder keeps all controls English even for an Arabic resum
   await expect(page.getByText('Notice before finalizing your resume')).toBeVisible();
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflow).toBeLessThanOrEqual(2);
 });
+
+
+test('mobile workspace keeps UI locale separate from resume content locale',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'parity-user',email:'parity@test.invalid',name:'Parity'}));localStorage.setItem('mocv.locale','en');localStorage.removeItem('mocv.resumes.v1')});
+  await page.goto('/#/dashboard');
+  await page.getByRole('button',{name:'Create New Resume'}).click();
+  await expect(page.locator('.builderContext')).toContainText('Interface: English');
+  await expect(page.locator('.builderContext')).toContainText('Resume: English');
+  await page.getByLabel('Resume language').selectOption('ar');
+  await expect(page.locator('.builderContext')).toContainText('Resume: العربية');
+  await expect(page.locator('.cvPreview')).toHaveAttribute('dir','rtl');
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(2);
+});
