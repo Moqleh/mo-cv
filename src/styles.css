@@ -375,7 +375,7 @@ main[lang="ar"]{direction:rtl}
 
 
 /* MO CV premium output system — final source of truth, aligned to approved visual references */
-.cvPreview{--ink:#0b1f44;--muted:#5f6f86;--accent:#0878f9;--line:#d9e5f2;position:relative;background:#fff;color:var(--ink);font-family:Arial,Tahoma,sans-serif;border-radius:2px;overflow:hidden}
+.cvPreview{--ink:#0b1f44;--muted:#5f6f86;--accent:#0878f9;--line:#d9e5f2;position:relative;background:#fff;color:var(--ink);font-family:Arial,Tahoma,sans-serif;border-radius:2px;overflow:visible}
 .cvPreview .cvIdentity{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px 18px}
 .cvPreview .cvNameBlock{min-width:0}.cvPreview .cvNameBlock h1{line-height:1.08}.cvPreview .cvNameBlock h2{line-height:1.3}
 .cvMonogram{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#eaf4ff;color:#086be5;border:3px solid #fff;box-shadow:0 0 0 1px #cfe3fb;font-weight:800;font-size:18px;letter-spacing:.03em}
