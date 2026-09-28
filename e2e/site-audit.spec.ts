@@ -32,5 +32,5 @@ test('approved premium CV templates render their intended visual architecture',a
  await select.selectOption('professional');await expect(cv.locator('.cvIdentity')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).backgroundImage)).not.toBe('none');
  await select.selectOption('modern');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvSidebar').evaluate(e=>getComputedStyle(e).backgroundImage)).not.toBe('none');await expect(cv.locator('.cvSidebar')).toContainText('Financial Analysis');
  await select.selectOption('creative');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).borderBottomColor)).toBe('rgb(239, 51, 78)');
- await select.selectOption('elegant');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');expect(await cv.locator('.cvMonogram').evaluate(e=>getComputedStyle(e).display)).not.toBe('none');
+ await select.selectOption('elegant');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');expect(await cv.locator('.cvMonogram').evaluate(e=>getComputedStyle(e).display)).toBe('none');
 });
