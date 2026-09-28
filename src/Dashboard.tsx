@@ -2,7 +2,7 @@ import{useEffect,useState}from'react';import{FilePlus2,Pencil,Trash2,Copy,Edit3}
 export default function Dashboard({open,onHome,locale}:{open:(id?:string)=>void;onHome:()=>void;locale:UiLocale}){
  const en=locale==='en';const tr=(ar:string,enText:string)=>en?enText:ar;
  const[items,setItems]=useState<ResumeV1[]>(()=>repo.all());const[cloud,setCloud]=useState<CloudResume[]>([]);const[error,setError]=useState('');const configured=cloudRepo.configured();
- const message=(e:unknown,ar:string,enText:string)=>e instanceof Error?e.message:tr(ar,enText);
+ const message=(_e:unknown,ar:string,enText:string)=>tr(ar,enText);
  const displayTitle=(title:string)=>{const t=(title||'').trim();if(en&&(t==='سيرتي الذاتية'||t==='سيرة ذاتية جديدة'))return 'My Resume';if(!en&&(t==='My Resume'||t==='New Resume'))return 'سيرتي الذاتية';return title};
  const dateText=(value:unknown)=>{const d=new Date(typeof value==='string'||typeof value==='number'?value:Date.now());return Number.isNaN(d.getTime())?tr('تاريخ غير متاح','Date unavailable'):d.toLocaleString(en?'en-US':'ar-JO')};
  async function load(){if(!configured){setItems(repo.all());return}try{const x=await cloudRepo.all();setCloud(x);setItems(x.map(v=>v.resume));setError('')}catch(e){setError(message(e,'تعذر تحميل السير السحابية','Could not load cloud resumes'))}}
