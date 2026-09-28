@@ -82,21 +82,18 @@ test('final CV renders all professional sections and printable layout safely',as
   await entry.locator('input').nth(0).fill('Finance Manager');
   await entry.locator('input').nth(1).fill('Example Company');
   await entry.locator('textarea').fill('Led planning, reporting and process improvement initiatives with measurable outcomes.');
-  await page.getByRole('button',{name:'Add Education'}).click();
-  await page.getByRole('button',{name:'Add Certification'}).click();
-  await page.getByRole('button',{name:'Add Project'}).click();
-  await page.getByRole('button',{name:'Add Course'}).click();
+  await page.getByRole('button',{name:'Add Education'}).click(); await page.getByPlaceholder('Degree').fill('MBA'); await page.getByPlaceholder('School').fill('Global University');\n  await page.getByRole('button',{name:'Add Certification'}).click(); await page.getByPlaceholder('Certification Name').fill('CMA');\n  await page.getByRole('button',{name:'Add Project'}).click(); await page.getByPlaceholder('Project Name').fill('Transformation Program');\n  await page.getByRole('button',{name:'Add Course'}).click(); await page.getByPlaceholder('Course Name').fill('Executive Leadership');
   await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\nLeadership\nBudgeting\nReporting');
   await page.getByRole('button',{name:'Add Language'}).click(); await page.getByRole('textbox',{name:'Language'}).fill('Arabic'); await page.getByRole('textbox',{name:'Level'}).fill('Native');
   await page.getByRole('button',{name:'Add Language'}).click(); const languageFields=page.getByRole('textbox',{name:'Language'}); const levelFields=page.getByRole('textbox',{name:'Level'}); await languageFields.nth(1).fill('English'); await levelFields.nth(1).fill('Advanced');
   const preview=page.locator('.cvPreview');
   await expect(preview.getByText('Mohammed Al-Oqleh')).toBeVisible();
   await expect(preview.getByRole('heading',{name:'Professional Summary'})).toBeVisible();
-  await expect(preview.getByRole('heading',{name:'Experience'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Professional Experience'})).toBeVisible();
   await expect(preview.getByRole('heading',{name:'Education'})).toBeVisible();
   await expect(preview.getByRole('heading',{name:'Certifications'})).toBeVisible();
-  await expect(preview.getByRole('heading',{name:'Projects'})).toBeVisible();
-  await expect(preview.getByRole('heading',{name:'Courses'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Selected Projects'})).toBeVisible();
+  await expect(preview.getByRole('heading',{name:'Professional Development'})).toBeVisible();
   await expect(preview.getByRole('heading',{name:'Skills'})).toBeVisible();
   await expect(preview.getByRole('heading',{name:'Languages'})).toBeVisible();
   await expect(preview).toHaveAttribute('dir','ltr');
@@ -125,7 +122,7 @@ test('Arabic final CV preserves every entered field and RTL output',async({page}
   await page.locator('.editor>textarea').first().fill('ملخص مهني عربي شامل.');
   await expect(p).toHaveAttribute('dir','rtl');
   await expect(p).toHaveAttribute('lang','ar');
-  for(const value of ['محمد العقلة','مدير مالي','arabic@example.com','+966500000001','الرياض، السعودية','https://example.com','https://linkedin.com/in/example','ملخص مهني عربي شامل.']) await expect(p.getByText(value,{exact:false})).toBeVisible();
+  for(const value of ['محمد العقلة','مدير مالي','arabic@example.com','+966500000001','الرياض، السعودية','ملخص مهني عربي شامل.']) await expect(p.getByText(value,{exact:false})).toBeVisible();\n  await expect(p.locator('a[href="https://example.com"]')).toBeVisible();await expect(p.locator('a[href="https://linkedin.com/in/example"]')).toBeVisible();
   for(const heading of ['الملخص المهني']) await expect(p.getByRole('heading',{name:heading})).toBeVisible();
 });
 
@@ -175,7 +172,7 @@ test('secure export requires acknowledgement and fails closed when moderation is
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'security@example.test',name:'Security'}));localStorage.setItem('mocv.locale','en')});
   await page.goto('/#/dashboard');
   await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
-  await page.getByLabel('Full Name').fill('Security Verification');
+  await page.getByLabel('Full Name').fill('Security Verification');await page.getByLabel('Job Title').fill('Security Manager');
   let printed=false;await page.exposeFunction('__securePrint',()=>{printed=true});await page.evaluate(()=>{window.print=()=>{void (window as any).__securePrint()}});
   await page.getByRole('button',{name:/PDF/}).click();
   await expect(page.getByRole('status')).toContainText('responsibility acknowledgement');
@@ -189,7 +186,7 @@ test('secure export requires acknowledgement and fails closed when moderation is
 
 test('secure export blocks rejected moderation and prints only allowed content',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'moderation@example.test',name:'Moderation'}));localStorage.setItem('mocv.locale','en')});
-  await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();await page.getByLabel('Full Name').fill('Moderation Verification');await page.getByRole('checkbox').check();
+  await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();await page.getByLabel('Full Name').fill('Moderation Verification');await page.getByLabel('Job Title').fill('Moderation Manager');await page.getByRole('checkbox').check();
   let printed=false;await page.exposeFunction('__moderationPrint',()=>{printed=true});await page.evaluate(()=>{window.print=()=>{void (window as any).__moderationPrint()}});
   await page.route('**/functions/v1/cv-moderate',async route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({allowed:false,severity:'standard',categories:['unprofessional'],strikes30d:1,suspended:false})}));
   await page.getByRole('button',{name:/PDF/}).click();await expect(page.getByRole('status')).toContainText('Export was blocked');expect(printed).toBe(false);
