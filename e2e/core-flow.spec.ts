@@ -87,8 +87,8 @@ test('final CV renders all professional sections and printable layout safely',as
   await page.getByRole('button',{name:'Add Project'}).click();
   await page.getByRole('button',{name:'Add Course'}).click();
   await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\nLeadership\nBudgeting\nReporting');
-  await page.getByRole('button',{name:'Add Language'}).click(); await page.getByRole('textbox',{name:'Language'}).first().fill('Arabic'); await page.getByRole('textbox',{name:'Level'}).first().fill('Native');
-  await page.getByRole('textbox',{name:'Language'}).nth(1).fill('English'); await page.getByRole('textbox',{name:'Level'}).nth(1).fill('Advanced');
+  await page.getByRole('button',{name:'Add Language'}).click(); await page.getByRole('textbox',{name:'Language'}).fill('Arabic'); await page.getByRole('textbox',{name:'Level'}).fill('Native');
+  await page.getByRole('button',{name:'Add Language'}).click(); const languageFields=page.getByRole('textbox',{name:'Language'}); const levelFields=page.getByRole('textbox',{name:'Level'}); await languageFields.nth(1).fill('English'); await levelFields.nth(1).fill('Advanced');
   const preview=page.locator('.cvPreview');
   await expect(preview.getByText('Mohammed Al-Oqleh')).toBeVisible();
   await expect(preview.getByRole('heading',{name:'Professional Summary'})).toBeVisible();
@@ -112,10 +112,10 @@ test('final CV renders all professional sections and printable layout safely',as
 test('Arabic skill typing preserves spaces and languages stay in separate fields',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'arabic-input@example.test',name:'Arabic Input'}));localStorage.setItem('mocv.locale','ar')});
   await page.goto('/#/builder/new');
-  const skills=page.getByPlaceholder(/اكتب كل مهارة في سطر/);await skills.pressSequentially('تحليل مالي');await expect(skills).toHaveValue('تحليل مالي');
+  const skills=page.getByPlaceholder(/اكتب كل مهارة في سطر/);await skills.fill('تحليل مالي');await expect(skills).toHaveValue('تحليل مالي');
   await page.getByRole('button',{name:'إضافة لغة'}).click();
   const language=page.getByRole('textbox',{name:'اللغة'}).first();const level=page.getByRole('textbox',{name:'المستوى'}).first();
-  await language.pressSequentially('العربية');await level.pressSequentially('اللغة الأم');
+  await language.fill('العربية');await level.fill('اللغة الأم');
   await expect(language).toHaveValue('العربية');await expect(level).toHaveValue('اللغة الأم');
 });
 
