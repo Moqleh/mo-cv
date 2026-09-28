@@ -106,3 +106,5 @@ jobs:
           test "$AI_STATUS" = "401"
           MOD_STATUS="$(curl --silent --output /tmp/mod.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/cv-moderate" -H "Content-Type: application/json" --data '{"fields":[{"path":"summary","text":"test"}]}')"
           test "$MOD_STATUS" = "401"
+          DELETE_STATUS="$(curl --silent --output /tmp/delete.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/delete-account" -H "Content-Type: application/json")"
+          test "$DELETE_STATUS" = "401"
