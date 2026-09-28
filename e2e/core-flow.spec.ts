@@ -237,3 +237,12 @@ test('export rejects malformed links and impossible date ranges',async({page})=>
  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'validation-user',email:'validation@example.test',name:'Validation'}));localStorage.setItem('mocv.locale','en')});
  await page.goto('/#/dashboard');await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();await page.getByLabel('Full Name').fill('Validation User');await page.getByLabel('Job Title').fill('Manager');await page.getByLabel('Website').fill('javascript:alert(1)');await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').first();await e.getByLabel('Start date').fill('2026-09');await e.getByLabel('End date').fill('2025-01');await page.locator('.finalReviewNotice input[type="checkbox"]').check();await page.getByRole('button',{name:/PDF/}).click();await expect(page.getByRole('status').first()).toContainText(/valid links|روابط صحيحة/);await expect(page.locator('.cvPreview a[href^="javascript:"]')).toHaveCount(0);
 });
+
+test('landing navigation and FAQ controls are actionable',async({page})=>{
+ await page.addInitScript(()=>localStorage.setItem('mocv.locale','en'));await page.goto('/');
+ await page.getByRole('button',{name:'Features'}).first().click();await expect(page.locator('#features')).toBeInViewport();
+ await page.getByRole('button',{name:'Templates'}).first().click();await expect(page.locator('#templates')).toBeInViewport();
+ await page.getByRole('button',{name:'How It Works?'}).first().click();await expect(page.locator('#how')).toBeInViewport();
+ await page.getByRole('button',{name:'FAQ'}).first().click();await expect(page.locator('#faq')).toBeInViewport();
+ const faq=page.locator('.faqGrid button').first();await faq.click();await expect(faq).toHaveAttribute('aria-expanded','true');await faq.click();await expect(faq).toHaveAttribute('aria-expanded','false');
+});
