@@ -154,6 +154,21 @@ test('all five templates preserve CV content in Arabic and English',async({page}
 });
 
 
+
+test('print CSS uses A4-safe pagination for long resume sections',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'print-user',email:'print@example.test',name:'Print'}));localStorage.setItem('mocv.locale','en')});
+  await page.goto('/');
+  await page.getByRole('button',{name:/AI Assistant|المساعد الذكي/}).click();
+  await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await page.getByLabel('Full Name').fill('Long Resume Verification');
+  for(let i=0;i<8;i++){await page.getByRole('button',{name:'Add Experience'}).click();const e=page.locator('.entry').nth(i);await e.locator('input').nth(0).fill('Role '+(i+1));await e.locator('input').nth(1).fill('Company '+(i+1));await e.locator('textarea').fill('Delivered measurable improvements across planning, reporting, controls, operations and stakeholder management. '.repeat(3));}
+  await page.emulateMedia({media:'print'});
+  const preview=page.locator('.cvPreview');await expect(preview).toHaveCSS('width','702.984px');
+  const section=preview.locator('.cvSection').filter({has:preview.getByRole('heading',{name:'Experience'})});
+  await expect(section).toHaveCSS('break-inside','auto');
+  for(const id of ['classic','professional','modern','creative','elegant']){await page.locator('.builderTop select').nth(1).selectOption(id);await expect(preview).toHaveClass(new RegExp(id));await expect(preview.getByText('Role 8')).toBeVisible();}
+});
+
 test('secure export requires acknowledgement and fails closed when moderation is unavailable',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'security@example.test',name:'Security'}));localStorage.setItem('mocv.locale','en')});
   await page.goto('/#/dashboard');
