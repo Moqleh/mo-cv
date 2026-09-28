@@ -37,7 +37,6 @@ export function validateProfessionalContent(r:ResumeV1,locale:'ar'|'en'=r.locale
   const safeUrl=(v:string)=>!v.trim()||/^https:\/\/[^\s]+$/i.test(v.trim());
   if(!safeUrl(r.personal.website)||!safeUrl(r.personal.linkedin)||r.certifications.some(x=>!safeUrl(x.url))||r.projects.some(x=>!safeUrl(x.url)))issues.push(tr('استخدم روابط آمنة وصحيحة تبدأ بـ https://','Use valid secure links beginning with https://'));
   if(r.personal.phone&&r.personal.phone.replace(/[^0-9]/g,'').length<7)issues.push(tr('راجع رقم الهاتف قبل التصدير','Review the phone number before export'));
-  if(r.summary.trim()&&r.summary.trim().length<40)issues.push(tr('الملخص المهني قصير جداً؛ أضف قيمة مهنية واضحة قبل التصدير','The professional summary is too short; add clear professional value before export'));
   if(r.experience.some(x=>x.start&&x.end&&!x.current&&x.end<x.start)||r.education.some(x=>x.start&&x.end&&x.end<x.start))issues.push(tr('راجع التواريخ: تاريخ النهاية لا يمكن أن يسبق تاريخ البداية','Review dates: an end date cannot be before its start date'));
   if(fields.some(({text})=>profanity.some(rx=>rx.test(text))))issues.push(tr('احذف الألفاظ البذيئة أو الفاحشة قبل إنشاء السيرة النهائية','Remove profane or obscene language before creating the final resume'));
   if(fields.some(({text})=>directAbuse.some(rx=>rx.test(text))))issues.push(tr('احذف الإهانات أو الإساءة الشخصية قبل إنشاء السيرة النهائية','Remove insults or personal abuse before creating the final resume'));
