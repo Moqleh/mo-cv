@@ -37,7 +37,7 @@ export const auth={
   const{error}=await client.auth.updateUser({password});
   if(error)throw error
  },
- async deleteAccount(){if(!client)throw new Error('حذف الحساب يتطلب إعداد Supabase');const{error}=await client.rpc('delete_my_account');if(error)throw error;await client.auth.signOut()},
+ async deleteAccount(){if(!client)throw new Error('حذف الحساب يتطلب إعداد Supabase');const{error}=await client.functions.invoke('delete-account',{method:'POST'});if(error)throw error;await client.auth.signOut()},
  async signOut(){if(client)await client.auth.signOut();localStorage.removeItem(DEV)},
  async user(){if(client){const{data}=await client.auth.getUser();return data.user}if(!allowLocal)return null;try{return JSON.parse(localStorage.getItem(DEV)||'null')}catch{return null}}
 };
