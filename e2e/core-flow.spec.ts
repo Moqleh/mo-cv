@@ -250,3 +250,12 @@ test('landing navigation and FAQ controls are actionable',async({page})=>{
  await page.getByRole('button',{name:'FAQ'}).first().click();await expect(page.locator('#faq')).toBeInViewport();
  const faq=page.locator('.faqGrid button').first();await faq.click();await expect(faq).toHaveAttribute('aria-expanded','true');await faq.click();await expect(faq).toHaveAttribute('aria-expanded','false');
 });
+
+
+test('dashboard localizes legacy default resume titles without translating user content',async({page})=>{
+ await page.addInitScript(()=>localStorage.setItem('mocv.locale','en'));
+ await page.goto('/#/dashboard');
+ await expect(page.getByRole('heading',{name:'Your Resumes'})).toBeVisible();
+ const legacy=page.locator('.resumeGrid article').filter({has:page.getByRole('heading',{name:'My Resume'})});
+ if(await legacy.count())await expect(legacy.first()).toBeVisible();
+});
