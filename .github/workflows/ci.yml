@@ -19,7 +19,7 @@ jobs:
       - run: npm run test
       - run: npm run coverage
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium webkit
       - name: E2E full application suite
         run: npm run e2e
       - name: Upload E2E diagnostics
