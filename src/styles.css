@@ -372,3 +372,89 @@ main[lang="ar"]{direction:rtl}
  .cvPreview .achievementList{font-size:9.2pt;line-height:1.45}
  .cvPreview .summaryText{font-size:9.5pt;line-height:1.5}
 }
+
+
+/* MO CV premium output system — final source of truth, aligned to approved visual references */
+.cvPreview{--ink:#0b1f44;--muted:#5f6f86;--accent:#0878f9;--line:#d9e5f2;position:relative;background:#fff;color:var(--ink);font-family:Arial,Tahoma,sans-serif;border-radius:2px;overflow:hidden}
+.cvPreview .cvIdentity{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px 18px}
+.cvPreview .cvNameBlock{min-width:0}.cvPreview .cvNameBlock h1{line-height:1.08}.cvPreview .cvNameBlock h2{line-height:1.3}
+.cvMonogram{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#eaf4ff;color:#086be5;border:3px solid #fff;box-shadow:0 0 0 1px #cfe3fb;font-weight:800;font-size:18px;letter-spacing:.03em}
+.cvPreview .contact{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:5px 12px;align-items:center}
+.cvPreview .contact>span{display:inline-flex;align-items:center;gap:8px;min-width:0}.cvPreview .contact i{opacity:.35;font-style:normal}
+.cvPreview .cvBody{min-width:0}.cvPreview .cvSection{min-width:0}.cvPreview article{margin:0 0 9px}.cvPreview article>span{line-height:1.5}
+.cvPreview h3{font-weight:800;line-height:1.3}.cvPreview p{margin:5px 0}.cvPreview .summaryText{max-width:78ch}
+.cvPreview .skillTags span,.cvPreview .languageList span{break-inside:avoid}
+
+/* Classic — restrained, ATS-first editorial document */
+.cvPreview.classic{--accent:#111827;--ink:#111827;--line:#cbd0d7;border:1px solid #d8dde4!important;padding:42px 46px!important;font-family:Georgia,'Times New Roman',serif}
+.cvPreview.classic .cvMonogram{display:none}.cvPreview.classic .cvIdentity{display:block;text-align:center;border-bottom:2px solid #111827!important;padding-bottom:16px}
+.cvPreview.classic .cvNameBlock h1{font-size:29px!important;font-weight:700;letter-spacing:.01em}.cvPreview.classic .cvNameBlock h2{font-family:Arial,Tahoma,sans-serif;font-size:12px!important;letter-spacing:.12em;text-transform:uppercase;color:#4b5563}
+.cvPreview.classic .contact{justify-content:center;border:0!important;padding:5px 0 0!important;color:#5b6470}
+.cvPreview.classic h3{text-align:start;font-size:12.5px!important;letter-spacing:.07em;text-transform:uppercase;border-bottom:1px solid #9ca3af!important;padding-bottom:5px;margin:20px 0 9px}
+
+/* Professional — approved blue corporate/executive visual language */
+.cvPreview.professional{--accent:#0878f9;--ink:#0b2450;--line:#cfe1f5;border:1px solid #d9e7f5!important;border-top:7px solid #0878f9!important;padding:0 42px 38px!important}
+.cvPreview.professional .cvIdentity{grid-template-columns:auto minmax(0,1fr) minmax(185px,.72fr);background:linear-gradient(135deg,#f7fbff,#eaf4ff);margin:0 -42px 22px;padding:28px 42px 23px;border-bottom:1px solid #cfe3fb!important}
+.cvPreview.professional .cvMonogram{width:70px;height:70px;background:linear-gradient(145deg,#0c2f67,#0878f9);color:#fff;box-shadow:0 8px 20px #0b5fc22a}
+.cvPreview.professional .cvNameBlock h1{font-size:31px!important;color:#08265a}.cvPreview.professional .cvNameBlock h2{font-size:14px!important;color:#0878f9;font-weight:700}
+.cvPreview.professional .contact{grid-column:3;grid-row:1;align-self:stretch;display:grid;align-content:center;gap:6px;border:0!important;border-inline-start:1px solid #b9d5f3!important;padding:0 0 0 18px!important;color:#415978}
+.cvPreview.professional[dir="rtl"] .contact{padding:0 18px 0 0!important}
+.cvPreview.professional .contact i{display:none}.cvPreview.professional h3{font-size:13px!important;color:#0b4fa8;border-bottom:1px solid #bcd8f6!important;padding-bottom:6px;margin:19px 0 9px}
+.cvPreview.professional .entryHeading>b{color:#0b2450}.cvPreview.professional .skillTags span{background:#edf6ff;border-color:#c9e2fb;color:#0b4fa8}
+
+/* Modern — true two-column navy/blue composition based on approved reference */
+.cvPreview.modern{--accent:#0b82ff;--ink:#071f49;--line:#d4e5f6;border:1px solid #cfe1f3!important;border-inline-start:0!important;padding:0!important;background:#fff}
+.cvPreview.modern .cvIdentity{grid-template-columns:29% minmax(0,1fr) minmax(165px,.7fr);gap:0;background:linear-gradient(90deg,#082c61 0 29%,#fff 29%);padding:26px 30px 22px 0;border:0!important;margin:0}
+.cvPreview.modern[dir="rtl"] .cvIdentity{padding:26px 30px 22px 0}
+.cvPreview.modern .cvMonogram{grid-column:1;width:112px;height:112px;justify-self:center;background:linear-gradient(145deg,#eaf5ff,#c7e6ff);color:#073e82;border:5px solid #fff;box-shadow:0 0 0 3px #178cff;font-size:26px}
+.cvPreview.modern .cvNameBlock{grid-column:2;padding:0 24px}.cvPreview.modern .cvNameBlock h1{font-size:32px!important;color:#061d49}.cvPreview.modern .cvNameBlock h2{font-size:14px!important;color:#0878f9}
+.cvPreview.modern .contact{grid-column:3;grid-row:1;display:grid;align-content:center;gap:6px;border:0!important;border-inline-start:1px solid #bcd5ee!important;padding:0 0 0 16px!important;color:#304a6f}
+.cvPreview.modern[dir="rtl"] .contact{padding:0 16px 0 0!important}.cvPreview.modern .contact i{display:none}
+.cvPreview.modern .cvBody{display:grid!important;grid-template-columns:29% minmax(0,1fr);align-items:stretch;min-height:900px}
+.cvPreview.modern .cvMain{grid-column:2;padding:2px 30px 34px 28px;min-width:0}.cvPreview.modern[dir="rtl"] .cvMain{padding:2px 28px 34px 30px}
+.cvPreview.modern .cvSidebar{grid-column:1;grid-row:1;background:linear-gradient(180deg,#082c61,#031b3f);color:#fff;padding:8px 24px 34px;min-width:0}
+.cvPreview.modern .cvSidebar h3{color:#fff!important;border-bottom:1px solid #35a6ff!important;background:transparent!important;padding:0 0 7px!important;margin:18px 0 10px!important}
+.cvPreview.modern .cvSidebar .skillTags{display:grid;gap:7px}.cvPreview.modern .cvSidebar .skillTags span{background:#ffffff10;border:1px solid #ffffff24;color:#fff;padding:6px 8px}
+.cvPreview.modern .cvSidebar .languageList{display:grid;gap:8px;color:#fff}.cvPreview.modern .cvSidebar .languageList span{border-bottom:1px solid #ffffff20;padding-bottom:6px}
+.cvPreview.modern .cvMain h3{background:transparent!important;border:0!important;border-bottom:1px solid #bcd9f6!important;border-inline-start:0!important;border-radius:0!important;padding:0 0 6px!important;color:#082c61;margin:19px 0 9px}
+.cvPreview.modern .cvMain article{border-inline-start:2px solid #b9dcff;padding-inline-start:12px;position:relative}.cvPreview.modern .cvMain article:before{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:#0b82ff;inset-inline-start:-4.5px;top:5px}
+
+/* Creative — bold red/charcoal portfolio presentation, not a recolored Professional */
+.cvPreview.creative{--accent:#ef334e;--ink:#171b25;border:1px solid #e3e6eb!important;padding:0!important;background:#fff}
+.cvPreview.creative .cvIdentity{grid-template-columns:31% minmax(0,1fr);gap:0;background:linear-gradient(110deg,#171d2a 0 31%,#fff 31%);padding:28px 32px 24px 0;border-bottom:6px solid #ef334e!important;margin:0;color:#171b25}
+.cvPreview.creative .cvMonogram{grid-column:1;width:104px;height:104px;justify-self:center;background:#232b3b;color:#fff;border:5px solid #ef334e;box-shadow:none;font-size:24px}
+.cvPreview.creative .cvNameBlock{grid-column:2;padding:0 28px}.cvPreview.creative .cvNameBlock h1{font-size:32px!important;color:#171b25!important}.cvPreview.creative .cvNameBlock h2{font-size:14px!important;color:#ef334e!important}
+.cvPreview.creative .contact{grid-column:2;padding:8px 28px 0!important;border:0!important;color:#596273!important}.cvPreview.creative .contact i{color:#ef334e;opacity:1}
+.cvPreview.creative .cvBody{display:grid!important;grid-template-columns:31% minmax(0,1fr);min-height:880px}.cvPreview.creative .cvMain{grid-column:2;padding:5px 32px 34px}.cvPreview.creative .cvSidebar{grid-column:1;grid-row:1;background:#171d2a;color:#fff;padding:12px 24px 34px}
+.cvPreview.creative .cvSidebar h3{color:#fff!important;padding-inline-start:12px!important}.cvPreview.creative .cvSidebar h3:before{background:#ef334e!important}.cvPreview.creative .cvSidebar .skillTags{display:grid}.cvPreview.creative .cvSidebar .skillTags span{background:#ffffff0d;border-color:#ffffff22;color:#fff}.cvPreview.creative .cvSidebar .languageList{display:grid;color:#fff}
+.cvPreview.creative .cvMain h3{color:#171b25!important;border-bottom:2px solid #ef334e!important;padding:0 0 6px!important}.cvPreview.creative .cvMain h3:before{display:none}.cvPreview.creative .entryHeading time{color:#ef334e}
+
+/* Elegant — quiet premium minimalism */
+.cvPreview.elegant{--accent:#4a8b76;--ink:#253a35;border:1px solid #dfe8e4!important;padding:48px 52px!important;color:#334b44;font-family:Georgia,'Times New Roman',serif}
+.cvPreview.elegant .cvMonogram{width:62px;height:62px;margin:0 auto 12px;background:#eef6f2;color:#3d7b68;border-color:#fff;box-shadow:0 0 0 1px #cfe0d9}
+.cvPreview.elegant .cvIdentity{display:block;text-align:center;border:0!important}.cvPreview.elegant .cvNameBlock h1{font-size:31px!important;font-weight:500;color:#263d36}.cvPreview.elegant .cvNameBlock h2{font-family:Arial,Tahoma,sans-serif;color:#4a8b76;font-size:12px!important;letter-spacing:.11em;text-transform:uppercase}
+.cvPreview.elegant .contact{justify-content:center;border:0!important;padding:8px 0 0!important;color:#64756f}.cvPreview.elegant h3{color:#365f52!important;text-align:start!important;border:0!important;margin:20px 0 9px!important;letter-spacing:.05em}.cvPreview.elegant h3:after{width:100%!important;background:#d5e3de!important;margin:6px 0 0!important}
+.cvPreview.elegant .skillTags,.cvPreview.elegant .languageList{justify-content:flex-start}
+
+/* Preview remains readable on phones without pretending the A4 sheet is a mobile form. */
+@media(max-width:700px){
+ .cvPreview{border-radius:8px!important}
+ .cvPreview.professional .cvIdentity{grid-template-columns:auto 1fr;margin:0 -24px 18px;padding:22px 24px}.cvPreview.professional .contact{grid-column:1/-1;grid-row:auto;border-inline-start:0!important;border-top:1px solid #cfe1f5!important;padding:9px 0 0!important}
+ .cvPreview.modern .cvIdentity,.cvPreview.creative .cvIdentity{display:grid;grid-template-columns:72px minmax(0,1fr);background:#fff;padding:20px!important;border-bottom:4px solid var(--accent)!important}.cvPreview.modern .cvMonogram,.cvPreview.creative .cvMonogram{width:62px;height:62px;grid-column:1;font-size:16px}.cvPreview.modern .cvNameBlock,.cvPreview.creative .cvNameBlock{grid-column:2;padding:0 10px}.cvPreview.modern .contact,.cvPreview.creative .contact{grid-column:1/-1;grid-row:auto;padding:9px 0 0!important;border-inline-start:0!important}
+ .cvPreview.modern .cvBody,.cvPreview.creative .cvBody{display:block!important;min-height:0}.cvPreview.modern .cvMain,.cvPreview.creative .cvMain{padding:4px 20px 20px}.cvPreview.modern .cvSidebar,.cvPreview.creative .cvSidebar{padding:8px 20px 20px;background:#f5f8fb;color:var(--ink)}.cvPreview.modern .cvSidebar h3,.cvPreview.creative .cvSidebar h3{color:var(--ink)!important;border-color:var(--accent)!important}.cvPreview.modern .cvSidebar .skillTags span,.cvPreview.creative .cvSidebar .skillTags span{background:#fff;color:var(--ink);border-color:#d8e3ee}.cvPreview.modern .cvSidebar .languageList,.cvPreview.creative .cvSidebar .languageList{color:var(--ink)}
+}
+
+/* Printing preserves the chosen design instead of flattening every template to generic Arial. */
+@media print{
+ body{background:#fff!important}
+ .cvPreview{position:static!important;width:186mm!important;max-width:186mm!important;min-height:273mm!important;margin:0 auto!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+ .cvPreview.classic{font-family:Georgia,'Times New Roman',serif!important;padding:10mm 11mm!important}
+ .cvPreview.professional{font-family:Arial,Tahoma,sans-serif!important;padding:0 10mm 9mm!important}
+ .cvPreview.professional .cvIdentity{margin:0 -10mm 6mm!important;padding:7mm 10mm 5.5mm!important}
+ .cvPreview.modern,.cvPreview.creative{font-family:Arial,Tahoma,sans-serif!important;padding:0!important}
+ .cvPreview.elegant{font-family:Georgia,'Times New Roman',serif!important;padding:11mm 12mm!important}
+ .cvPreview .skillTags span{print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
+ .cvPreview.modern .cvBody,.cvPreview.creative .cvBody{min-height:245mm}
+ .cvPreview .cvSection{break-inside:auto!important;page-break-inside:auto!important}
+ .cvPreview .cvSection>article,.cvPreview .skillTags,.cvPreview .languageList,.cvPreview .cvIdentity{break-inside:avoid;page-break-inside:avoid}
+}
