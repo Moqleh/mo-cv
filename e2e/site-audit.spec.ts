@@ -23,3 +23,14 @@ test('dashboard primary actions create, rename, duplicate, edit and delete a res
  const first=page.locator('.resumeGrid article').first();await first.getByRole('button',{name:'Edit'}).click();await expect(page.locator('.cvPreview')).toBeVisible();await page.getByRole('button',{name:'Home'}).first().click();
  page.once('dialog',async d=>{expect(d.type()).toBe('confirm');await d.accept()});await page.locator('.resumeGrid article').first().getByRole('button',{name:'Delete'}).click();await expect(page.locator('.resumeGrid article')).toHaveCount(1);
 });
+
+test('approved premium CV templates render their intended visual architecture',async({page})=>{
+ await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'visual-user',email:'visual@example.test',name:'Visual'}));localStorage.setItem('mocv.locale','en')});await page.goto('/#/dashboard');await page.getByRole('button',{name:'Create New Resume'}).click();
+ await page.getByLabel('Full Name').fill('Mohammed Mansour');await page.getByLabel('Job Title').fill('Financial Director');await page.getByRole('button',{name:'Add Language'}).click();await page.getByRole('textbox',{name:'Language'}).fill('Arabic');await page.getByRole('textbox',{name:'Level'}).fill('Native');await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\\nLeadership');
+ const select=page.getByLabel('Resume template'),cv=page.locator('.cvPreview');
+ await select.selectOption('classic');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');await expect(cv.locator('.cvMonogram')).toBeHidden();
+ await select.selectOption('professional');await expect(cv.locator('.cvIdentity')).toHaveCSS('display','grid');expect((await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).backgroundImage))).not.toBe('none');
+ await select.selectOption('modern');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvSidebar').evaluate(e=>getComputedStyle(e).backgroundImage)).not.toBe('none');await expect(cv.locator('.cvSidebar')).toContainText('Financial Analysis');
+ await select.selectOption('creative');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).borderBottomColor)).toBe('rgb(239, 51, 78)');
+ await select.selectOption('elegant');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');await expect(cv.locator('.cvMonogram')).toBeVisible();
+});
