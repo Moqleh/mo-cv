@@ -32,3 +32,15 @@ test('mobile PDF check always returns control to the user',async({page})=>{
   await expect(pdf).toBeEnabled({timeout:9000});
   await expect(page.locator('.editorStatus')).toContainText('press PDF to retry',{timeout:9000});
 });
+
+
+test('mobile dashboard stays inside viewport in English and Arabic',async({page})=>{
+  await page.addInitScript(()=>{const r={schemaVersion:1,id:'mobile-card',title:'My Resume',locale:'en',template:'professional',updatedAt:new Date().toISOString(),personal:{fullName:'Mobile User',jobTitle:'Finance Manager',email:'',phone:'',location:'',website:'',linkedin:''},summary:'',experience:[],education:[],skills:[],languages:[],certifications:[],projects:[],courses:[],sectionOrder:['summary','experience','education','skills','languages','certifications','projects','courses']};localStorage.setItem('mocv.dev.user',JSON.stringify({id:'dash-mobile',email:'dash@test.invalid',name:'Mobile'}));localStorage.setItem('mocv.locale','en');localStorage.setItem('mocv.resumes.v1',JSON.stringify([r]))});
+  await page.goto('/#/dashboard');
+  await expect(page.getByRole('heading',{name:'Your Resumes'})).toBeVisible();
+  const overflowEn=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflowEn).toBeLessThanOrEqual(2);
+  const actions=page.locator('.resumeGrid article>div:last-child').first();expect(await actions.evaluate(el=>el.scrollWidth-el.clientWidth)).toBeLessThanOrEqual(2);
+  await page.locator('.globalLocale').click();
+  await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
+  const overflowAr=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflowAr).toBeLessThanOrEqual(2);
+});
