@@ -109,6 +109,16 @@ test('final CV renders all professional sections and printable layout safely',as
 });
 
 
+test('Arabic skill typing preserves spaces and languages stay in separate fields',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'arabic-input@example.test',name:'Arabic Input'}));localStorage.setItem('mocv.locale','ar')});
+  await page.goto('/#/builder/new');
+  const skills=page.getByPlaceholder(/اكتب كل مهارة في سطر/);await skills.pressSequentially('تحليل مالي');await expect(skills).toHaveValue('تحليل مالي');
+  await page.getByRole('button',{name:'إضافة لغة'}).click();
+  const language=page.getByRole('textbox',{name:'اللغة'}).first();const level=page.getByRole('textbox',{name:'المستوى'}).first();
+  await language.pressSequentially('العربية');await level.pressSequentially('اللغة الأم');
+  await expect(language).toHaveValue('العربية');await expect(level).toHaveValue('اللغة الأم');
+});
+
 test('Arabic final CV preserves every entered field and RTL output',async({page})=>{
   await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'local-user',email:'arabic@example.test',name:'Arabic CV'}));localStorage.setItem('mocv.locale','ar')});
   await page.goto('/');
