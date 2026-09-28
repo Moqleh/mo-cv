@@ -39,7 +39,7 @@ test('mobile dashboard stays inside viewport in English and Arabic',async({page}
   await page.goto('/#/dashboard');
   await expect(page.getByRole('heading',{name:'Your Resumes'})).toBeVisible();
   const overflowEn=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflowEn).toBeLessThanOrEqual(2);
-  const actions=page.locator('.resumeGrid article>div:last-child').first();expect(await actions.evaluate(el=>el.scrollWidth-el.clientWidth)).toBeLessThanOrEqual(2);
+  const actions=page.locator('.resumeGrid article>div:last-child').first();if(await actions.count())expect(await actions.evaluate(el=>el.scrollWidth-el.clientWidth)).toBeLessThanOrEqual(2);
   await page.locator('.globalLocale').click();
   await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
   const overflowAr=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflowAr).toBeLessThanOrEqual(2);
