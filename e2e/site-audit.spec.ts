@@ -29,8 +29,8 @@ test('approved premium CV templates render their intended visual architecture',a
  await page.getByLabel('Full Name').fill('Mohammed Mansour');await page.getByLabel('Job Title').fill('Financial Director');await page.getByRole('button',{name:'Add Language'}).click();await page.getByRole('textbox',{name:'Language'}).fill('Arabic');await page.getByRole('textbox',{name:'Level'}).fill('Native');await page.getByPlaceholder(/Enter one skill per line/).fill('Financial Analysis\\nLeadership');
  const select=page.getByLabel('Resume template'),cv=page.locator('.cvPreview');
  await select.selectOption('classic');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');await expect(cv.locator('.cvMonogram')).toBeHidden();
- await select.selectOption('professional');await expect(cv.locator('.cvIdentity')).toHaveCSS('display','grid');await expect(cv.locator('.cvIdentity')).toHaveCSS('background-color','rgb(255, 255, 255)');
+ await select.selectOption('professional');await expect(cv.locator('.cvIdentity')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).backgroundImage)).not.toBe('none');
  await select.selectOption('modern');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvSidebar').evaluate(e=>getComputedStyle(e).backgroundImage)).not.toBe('none');await expect(cv.locator('.cvSidebar')).toContainText('Financial Analysis');
- await select.selectOption('creative');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).borderBottomColor)).toBe('rgb(213, 47, 72)');
- await select.selectOption('elegant');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');await expect(cv.locator('.cvMonogram')).toBeHidden();
+ await select.selectOption('creative');await expect(cv.locator('.cvBody')).toHaveCSS('display','grid');expect(await cv.locator('.cvIdentity').evaluate(e=>getComputedStyle(e).borderBottomColor)).toBe('rgb(239, 51, 78)');
+ await select.selectOption('elegant');expect((await cv.evaluate(e=>getComputedStyle(e).fontFamily)).toLowerCase()).toContain('georgia');expect(await cv.locator('.cvMonogram').evaluate(e=>getComputedStyle(e).display)).not.toBe('none');
 });
