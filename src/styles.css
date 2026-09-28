@@ -345,3 +345,30 @@ main[lang="ar"]{direction:rtl}
 
 /* Print pagination: sections may span pages; individual entries stay together. */
 @media print{.cvPreview .cvSection{break-inside:auto!important;page-break-inside:auto!important}.cvPreview .cvSection>article,.cvPreview .skillTags,.cvPreview .languageList{break-inside:avoid;page-break-inside:avoid}.cvPreview h3{break-after:avoid-page;page-break-after:avoid}}
+
+/* Production CV typography and information hierarchy */
+.cvPreview{box-sizing:border-box;width:min(100%,210mm);font-variant-numeric:tabular-nums;hyphens:none}
+.cvIdentity{padding-bottom:18px}
+.cvPreview .contact a{color:inherit;text-decoration:none;overflow-wrap:anywhere}
+.cvPreview .cvBody{display:block}
+.cvPreview .entryHeading{display:flex;align-items:baseline;justify-content:space-between;gap:18px}
+.cvPreview .entryHeading>b{font-size:12px;line-height:1.45;color:#172033}
+.cvPreview .entryHeading time{flex:none;font-size:9.5px;font-weight:600;color:#64748b;white-space:nowrap}
+.cvPreview .summaryText{font-size:11.2px;line-height:1.72}
+.cvPreview .achievementList{margin:5px 0 8px;padding-inline-start:17px;color:#3e4856;font-size:10.8px;line-height:1.62}
+.cvPreview .achievementList li{margin:2px 0;padding-inline-start:2px}
+.cvPreview .cvLink{display:inline-block;margin-top:3px;font-size:9.5px;font-weight:600;color:inherit;text-decoration:underline;text-underline-offset:2px}
+.cvPreview article:has(.entryHeading){gap:1px}
+.cvPreview.classic .entryHeading time,.cvPreview.elegant .entryHeading time{color:#4b5563}
+.cvPreview.professional .entryHeading time{color:#1d4ed8}
+.cvPreview.modern .entryHeading time{color:#0f766e}
+.cvPreview.creative .entryHeading time{color:#6d28d9}
+@media(max-width:700px){.cvPreview .entryHeading{gap:10px}.cvPreview .entryHeading time{font-size:9px}.cvPreview .achievementList{font-size:10.4px}}
+@media print{
+ .cvPreview{width:186mm!important;min-height:273mm!important;font-size:10.5pt}
+ .cvPreview .cvIdentity,.cvPreview .cvSection>article,.cvPreview .skillTags,.cvPreview .languageList{break-inside:avoid;page-break-inside:avoid}
+ .cvPreview .cvSection{break-inside:auto!important;page-break-inside:auto!important}
+ .cvPreview .entryHeading time{font-size:8.5pt}
+ .cvPreview .achievementList{font-size:9.2pt;line-height:1.45}
+ .cvPreview .summaryText{font-size:9.5pt;line-height:1.5}
+}
