@@ -21,7 +21,7 @@ test('AI-disabled core flow persists a resume and reaches PDF print',async({page
   await page.route('**/functions/v1/cv-moderate',async route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({allowed:true,categories:[],reason:'ok'})}));
   await page.getByRole('button',{name:/PDF/}).click();
   await expect.poll(()=>printed).toBe(true);
-  await page.getByRole('button',{name:/الرئيسية/}).first().click();
+  await page.getByRole('button',{name:/لوحة التحكم/}).first().click();
   await expect(page.getByRole('heading',{name:'سيرك الذاتية'})).toBeVisible();
   await expect(page.getByText('محمد اختبار')).toBeVisible();
   await page.getByRole('button',{name:'تسجيل الخروج'}).click();
