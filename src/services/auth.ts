@@ -5,11 +5,13 @@ const client:SupabaseClient|null=url&&key?createClient(url,key):null;
 const baseUrl=()=>import.meta.env.PROD?'https://moqleh.github.io/mo-cv/':new URL(import.meta.env.BASE_URL,location.origin).href;
 const recoveryUrl=()=>{const u=new URL(baseUrl());u.searchParams.set('recovery','1');return u.href};
 const DEV='mocv.dev.user';const allowLocal=import.meta.env.DEV;
+async function assertPasswordNotBreached(password:string){if(!client)return;const bytes=new TextEncoder().encode(password);const digest=await crypto.subtle.digest('SHA-1',bytes);const sha1=[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();const{data,error}=await client.functions.invoke('password-breach-check',{body:{sha1}});if(error||!data||typeof data.pwned!=='boolean')throw new Error('BREACH_CHECK_UNAVAILABLE');if(data.pwned)throw new Error('PASSWORD_COMPROMISED')}
+
 export const supabase=client;
 export const auth={
  isCloudConfigured:()=>!!client,
  async signUp(email:string,password:string,name:string){
-  if(client){const{data,error}=await client.auth.signUp({email,password,options:{data:{name},emailRedirectTo:baseUrl()}});if(error)throw error;return{signedIn:!!data.session,needsEmailConfirmation:!data.session}}
+  if(client){await assertPasswordNotBreached(password);const{data,error}=await client.auth.signUp({email,password,options:{data:{name},emailRedirectTo:baseUrl()}});if(error)throw error;return{signedIn:!!data.session,needsEmailConfirmation:!data.session}}
   if(!allowLocal)throw new Error('خدمة تسجيل الدخول غير متاحة حالياً');
   localStorage.setItem(DEV,JSON.stringify({id:'local-user',email,name}));
   return{signedIn:true,needsEmailConfirmation:false}
@@ -33,7 +35,8 @@ export const auth={
  async session(){if(client){const{data}=await client.auth.getSession();return data.session}return allowLocal?this.user():null},
  async updatePassword(password:string){
   if(!client)throw new Error('تحديث كلمة المرور يتطلب إعداد Supabase');
-  if(password.length<8)throw new Error('كلمة المرور يجب أن تكون 8 أحرف على الأقل');
+  if(password.length<12)throw new Error('كلمة المرور يجب أن تكون 12 حرفاً على الأقل');
+  await assertPasswordNotBreached(password);
   const{error}=await client.auth.updateUser({password});
   if(error)throw error
  },
