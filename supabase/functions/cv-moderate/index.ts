@@ -1,7 +1,8 @@
 import{createClient}from'https://esm.sh/@supabase/supabase-js@2.45.4';
 const json=(body:unknown,status=200,cors:Record<string,string>={})=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json'}});
 async function hashText(s:string){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-Deno.serve(async req=>{\n const started=Date.now();const log=(outcome:string,extra:Record<string,unknown>={})=>console.log(JSON.stringify({service:'cv-moderate',outcome,duration_ms:Date.now()-started,...extra}));
+Deno.serve(async req=>{
+ const started=Date.now();const log=(outcome:string,extra:Record<string,unknown>={})=>console.log(JSON.stringify({service:'cv-moderate',outcome,duration_ms:Date.now()-started,...extra}));
  const cors={'Access-Control-Allow-Origin':Deno.env.get('APP_ORIGIN')||'https://moqleh.github.io','Access-Control-Allow-Headers':'authorization, content-type, apikey','Access-Control-Allow-Methods':'POST, OPTIONS'};
  if(req.method==='OPTIONS')return new Response('ok',{headers:cors});if(req.method!=='POST')return json({error:'method_not_allowed'},405,cors);
  try{
@@ -20,9 +21,18 @@ Deno.serve(async req=>{\n const started=Date.now();const log=(outcome:string,ext
   const joined=normalized.map((x:any)=>x.path+'\n'+x.text).join('\n---\n').slice(0,30000);
   if(!joined.trim())return json({allowed:true,categories:[],reason:'empty'},200,cors);
   const key=Deno.env.get('AI_API_KEY'),aiUrl=Deno.env.get('AI_API_URL'),model=Deno.env.get('AI_MODEL');
-  if(!key||!aiUrl||!model){log('not_configured');return json({allowed:false,error:'semantic_moderation_not_configured'},503,cors);}
+  if(!key||!aiUrl||!model){
+   // Deterministic server-side fallback keeps export available when the optional
+   // semantic provider is not configured. It still blocks clear abusive content.
+   const unsafe=/(?:fuck|shit|bitch|asshole|كس\s*ام|شرموط|قحبة|منيك|زب\b|كسمك|يلعن|حيوان\s+يا|غبي\s+يا)/iu.test(joined)||/(.)\1{7,}/u.test(joined);
+   if(!unsafe)return json({allowed:true,categories:[],reason:'server_rules'},200,cors);
+   const h=await hashText(joined);const nextStrikes=strikes+1;const suspended=nextStrikes>=3;
+   const{error:insertError}=await admin.from('content_moderation_events').insert({user_id:user.id,severity:'standard',categories:['abusive_language'],action:suspended?'suspended':'blocked',content_hash:h});
+   if(insertError)return json({allowed:false,error:'moderation_record_failed'},503,cors);
+   return json({allowed:false,severity:'standard',categories:['abusive_language'],reason:'Content is not suitable for a professional resume.',strikes30d:nextStrikes,suspended},200,cors);
+  }
   const system='You are a strict professional-resume content moderation gate. Analyze Arabic and English text. Return JSON only: {"allowed":boolean,"severity":"none"|"standard"|"severe","categories":string[],"reason":string}. Block direct profanity, obscene/vulgar sexual wording, insults/harassment, hateful or degrading slurs, threats, malicious content, or clearly abusive/unprofessional text. Do not block ordinary names, legitimate professional terms, URLs, locations, qualifications, or neutral descriptions. Severe means credible threats, hateful/degrading attacks, or extreme targeted abuse. Do not rewrite or repeat offensive text in reason.';
-  const upstream=await fetch(aiUrl,{method:'POST',signal:AbortSignal.timeout(6000),headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:joined}],temperature:0,response_format:{type:'json_object'}})});
+  const upstream=await fetch(aiUrl,{method:'POST',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:joined}],temperature:0,response_format:{type:'json_object'}})});
   if(!upstream.ok){log('provider_error',{status:upstream.status});return json({allowed:false,error:'moderation_unavailable'},503,cors);}
   const data=await upstream.json();const raw=data?.choices?.[0]?.message?.content;if(typeof raw!=='string')return json({allowed:false,error:'moderation_unavailable'},503,cors);
   let verdict:any;try{verdict=JSON.parse(raw)}catch(e){log('internal_error',{error:e instanceof Error?e.name:'unknown'});return json({allowed:false,error:'moderation_unavailable'},503,cors)}
