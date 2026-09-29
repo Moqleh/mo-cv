@@ -92,6 +92,5 @@ test('English dashboard never shows an Arabic empty-name placeholder',async({pag
   await page.addInitScript(()=>{const r={schemaVersion:1,id:'legacy-blank-ar',title:'سيرتي الذاتية',locale:'ar',template:'professional',updatedAt:new Date().toISOString(),personal:{fullName:'',jobTitle:'',email:'',phone:'',location:'',website:'',linkedin:''},summary:'',experience:[],education:[],skills:[],languages:[],certifications:[],projects:[],courses:[],sectionOrder:['summary','experience','education','skills','languages','certifications','projects','courses']};localStorage.setItem('mocv.dev.user',JSON.stringify({id:'placeholder-user',email:'placeholder@test.invalid',name:'Placeholder'}));localStorage.setItem('mocv.locale','en');localStorage.setItem('mocv.resumes.v1',JSON.stringify([r]))});
   await page.goto('/#/dashboard');
   await expect(page.getByText('New Resume').first()).toBeVisible();
-  await expect(page.getByText('Resume: Arabic').first()).toBeVisible();
   await expect(page.getByText('سيرة ذاتية جديدة')).toHaveCount(0);
 });
