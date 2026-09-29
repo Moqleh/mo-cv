@@ -623,3 +623,12 @@ main[lang="ar"]{direction:rtl}
 
 .dashboardPrimaryActions{display:flex;gap:12px;flex-wrap:wrap}.dashboardPrimaryActions>button{flex:1 1 240px;min-height:56px}.savedResumeCta{background:#fff;border:1px solid #cfd8e6;color:#102b54;display:flex;align-items:center;justify-content:center;gap:10px}.savedResumeCta svg{width:22px;height:22px}
 @media(max-width:700px){.dashboardPrimaryActions{display:grid;grid-template-columns:1fr}.dashboardPrimaryActions>button{width:100%;min-height:58px}}
+
+/* Auth remember-me alignment: checkbox follows the form edge in both LTR and RTL. */
+.authPage .rememberLogin{display:grid!important;grid-template-columns:22px minmax(0,1fr);align-items:start;justify-content:stretch;gap:10px;width:100%;margin:16px 0;text-align:start}
+.authPage .rememberLogin>input[type=checkbox]{display:block!important;width:20px!important;height:20px!important;margin:2px 0 0!important;padding:0!important;justify-self:start}
+.authPage .rememberLogin>span{display:block;min-width:0;text-align:start;line-height:1.45}
+.authPage .rememberLogin small{display:block;text-align:start;margin-top:3px}
+.authPage[dir=rtl] .rememberLogin{grid-template-columns:minmax(0,1fr) 22px}
+.authPage[dir=rtl] .rememberLogin>input[type=checkbox]{grid-column:2;grid-row:1}
+.authPage[dir=rtl] .rememberLogin>span{grid-column:1;grid-row:1}
