@@ -73,3 +73,25 @@ test('mobile workspace keeps UI locale separate from resume content locale',asyn
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(2);
 });
+
+
+test('switching interface language also switches a blank resume preview without translating authored content',async({page})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'locale-sync-user',email:'locale-sync@test.invalid',name:'Locale Sync'}));localStorage.setItem('mocv.locale','ar');localStorage.removeItem('mocv.resumes.v1')});
+  await page.goto('/#/dashboard');
+  await page.getByRole('button',{name:'إنشاء سيرة جديدة'}).click();
+  await expect(page.locator('.cvPreview')).toHaveAttribute('dir','rtl');
+  await page.getByRole('button',{name:'English'}).click();
+  await expect(page.locator('.builderContext')).toContainText('Interface: English');
+  await expect(page.locator('.builderContext')).toContainText('Resume: English');
+  await expect(page.locator('.cvPreview')).toHaveAttribute('dir','ltr');
+  await expect(page.locator('.cvPreview h1')).toHaveText('Your Name');
+  await expect(page.locator('.cvPreview h2')).toHaveText('Professional Title');
+});
+
+test('English dashboard never shows an Arabic empty-name placeholder',async({page})=>{
+  await page.addInitScript(()=>{const r={schemaVersion:1,id:'legacy-blank-ar',title:'سيرتي الذاتية',locale:'ar',template:'professional',updatedAt:new Date().toISOString(),personal:{fullName:'',jobTitle:'',email:'',phone:'',location:'',website:'',linkedin:''},summary:'',experience:[],education:[],skills:[],languages:[],certifications:[],projects:[],courses:[],sectionOrder:['summary','experience','education','skills','languages','certifications','projects','courses']};localStorage.setItem('mocv.dev.user',JSON.stringify({id:'placeholder-user',email:'placeholder@test.invalid',name:'Placeholder'}));localStorage.setItem('mocv.locale','en');localStorage.setItem('mocv.resumes.v1',JSON.stringify([r]))});
+  await page.goto('/#/dashboard');
+  await expect(page.getByText('New Resume').first()).toBeVisible();
+  await expect(page.getByText('Resume: Arabic').first()).toBeVisible();
+  await expect(page.getByText('سيرة ذاتية جديدة')).toHaveCount(0);
+});
