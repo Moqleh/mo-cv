@@ -601,9 +601,9 @@ main[lang="ar"]{direction:rtl}
     position:static!important;
     inset:auto!important;
     display:block!important;
-    width:auto!important;
-    max-width:none!important;
-    min-width:0!important;
+    width:185mm!important;
+    max-width:185mm!important;
+    min-width:185mm!important;
     height:auto!important;
     min-height:0!important;
     margin:0!important;
