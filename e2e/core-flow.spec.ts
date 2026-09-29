@@ -295,3 +295,17 @@ test('Arabic and English builder top controls keep the same mobile structure',as
  const arabic=await page.locator('.builderTop .builderControl').count();expect(arabic).toBe(3);
  await expect(page.locator('body')).not.toHaveCSS('overflow-x','scroll');
 });
+
+
+test('pending edits retry automatically after reconnect',async({page,context})=>{
+  await page.addInitScript(()=>{localStorage.setItem('mocv.dev.user',JSON.stringify({id:'offline-user',email:'offline@example.test',name:'Offline'}));localStorage.setItem('mocv.locale','en')});
+  await page.goto('/#/dashboard');
+  await page.getByRole('button',{name:/Create (New Resume|Now)/}).first().click();
+  await context.setOffline(true);
+  await page.getByLabel('Full Name').fill('Offline Recovery');
+  await expect(page.locator('.saveStateLive')).toContainText('Offline');
+  await context.setOffline(false);
+  await expect(page.locator('.saveStateLive')).toContainText('Saved',{timeout:5000});
+  await page.getByRole('button',{name:/Dashboard/}).first().click();
+  await expect(page.getByText('Offline Recovery')).toBeVisible();
+});
