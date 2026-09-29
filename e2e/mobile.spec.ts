@@ -55,7 +55,7 @@ test('mobile English builder keeps all controls English even for an Arabic resum
   await expect(page.getByText('Interface:')).toBeVisible();
   await expect(page.getByLabel('Resume language')).toHaveValue('ar');
   await expect(page.getByLabel('Resume template').locator('option:checked')).toHaveText('Professional');
-  await expect(page.getByRole('button',{name:/Save/})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Save',exact:true})).toBeVisible();
   await expect(page.getByText('Notice before finalizing your resume')).toBeVisible();
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);expect(overflow).toBeLessThanOrEqual(2);
 });
