@@ -634,3 +634,8 @@ main[lang="ar"]{direction:rtl}
 .authPage[dir=rtl] .rememberLogin>span{grid-column:1;grid-row:1}
 
 .savedResumePicker{margin:0 0 24px;padding:18px;border:1px solid #dce6f2;border-radius:18px;background:#fff}.savedResumePicker h2{margin:0 0 12px;color:#102b54;font-size:20px}.savedResumePicker>div{display:grid;gap:10px}.savedResumePicker button{width:100%;display:flex;align-items:center;gap:12px;text-align:start;padding:14px 16px;border:1px solid #d9e3ee;border-radius:12px;background:#fff;color:#102b54}.savedResumePicker button:hover,.savedResumePicker button:focus-visible{border-color:#0878f9;box-shadow:0 0 0 3px #0878f91a}.savedResumePicker button>span{display:grid;gap:3px;min-width:0}.savedResumePicker button b{font-size:16px;overflow-wrap:anywhere}.savedResumePicker button small{display:block;text-align:start;color:#6d7c8e}
+
+.builderMobileNav{display:flex;gap:10px;margin-bottom:14px}.builderMobileNav button{flex:1;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;border:1px solid #d5dfeb;border-radius:12px;color:#102b54;font-weight:700}.builderMobileNav svg{width:19px;height:19px}
+@media(min-width:901px){.builderMobileNav{display:none}}
+@media(max-width:900px){.builderMobileNav{display:grid;grid-template-columns:1fr 1fr;position:sticky;top:0;z-index:20;background:#fff;padding:8px 0}.builderMobileNav button{font-size:14px}}
+@media(max-width:420px){.builderMobileNav{grid-template-columns:1fr}.builderMobileNav button{min-height:44px}}
