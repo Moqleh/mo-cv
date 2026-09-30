@@ -53,5 +53,7 @@ jobs:
           SITE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error --location --retry 6 --retry-all-errors --retry-delay 5 "${SITE_URL%/}/sitemap.xml" | grep -Fq '<urlset'
-          curl --fail --silent --show-error --location --retry 6 --retry-all-errors --retry-delay 5 "${SITE_URL%/}/robots.txt" | grep -Fq 'Sitemap:'
+          curl --fail --silent --show-error --location --retry 6 --retry-all-errors --retry-delay 5 --output /tmp/sitemap.xml "${SITE_URL%/}/sitemap.xml"
+          grep -Fq '<urlset' /tmp/sitemap.xml
+          curl --fail --silent --show-error --location --retry 6 --retry-all-errors --retry-delay 5 --output /tmp/robots.txt "${SITE_URL%/}/robots.txt"
+          grep -Fq 'Sitemap:' /tmp/robots.txt
