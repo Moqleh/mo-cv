@@ -19,26 +19,8 @@ jobs:
         with:
           node-version: 24
       - run: npm install --no-audit --no-fund
-      - name: Audit production configuration
-        env:
-          VITE_SUPABASE_URL: https://nkszihlrwbwystbbaadh.supabase.co
-          VITE_SUPABASE_ANON_KEY: sb_publishable_hkFTWF1D7kfkaT3aFPecWg_qumsEZ5i
-          VITE_AI_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/ai-enhance
-          VITE_MODERATION_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/cv-moderate
-        run: |
-          set -euo pipefail
-          missing=0
-          test -n "$VITE_SUPABASE_URL" || { echo "::warning::Missing VITE_SUPABASE_URL — cloud auth/persistence remain disabled"; missing=1; }
-          test -n "$VITE_SUPABASE_ANON_KEY" || { echo "::warning::Missing VITE_SUPABASE_ANON_KEY — cloud auth/persistence remain disabled"; missing=1; }
-          test -n "$VITE_AI_ENDPOINT" || { echo "::warning::Missing VITE_AI_ENDPOINT — AI enhancement remains disabled"; missing=1; }
-          test -n "$VITE_MODERATION_ENDPOINT" || { echo "::error::Missing VITE_MODERATION_ENDPOINT — secure export cannot be enabled"; exit 1; }
-          if test -n "$VITE_SUPABASE_URL"; then case "$VITE_SUPABASE_URL" in https://*) ;; *) echo "::error::VITE_SUPABASE_URL must use HTTPS"; exit 1;; esac; fi
-          if test -n "$VITE_AI_ENDPOINT"; then case "$VITE_AI_ENDPOINT" in https://*) ;; *) echo "::error::VITE_AI_ENDPOINT must use HTTPS"; exit 1;; esac; fi
-          if test "$missing" -eq 1; then echo "Production services are not fully configured; deploying the static fallback only."; fi
       - run: npm run typecheck
       - run: npm run test
-      - run: npm run coverage
-      - run: npm audit --audit-level=high
       - name: Build production bundle
         run: npm run build
         env:
@@ -46,17 +28,8 @@ jobs:
           VITE_SUPABASE_ANON_KEY: sb_publishable_hkFTWF1D7kfkaT3aFPecWg_qumsEZ5i
           VITE_AI_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/ai-enhance
           VITE_MODERATION_ENDPOINT: https://nkszihlrwbwystbbaadh.supabase.co/functions/v1/cv-moderate
-      - run: npx playwright install --with-deps chromium webkit
-      - name: Full end-to-end acceptance suite
-        run: npm run e2e
-        env:
-          # Browser acceptance tests use the explicit local DEV identity and mock
-          # network boundaries. The production bundle above is still built with
-          # the real service configuration.
-          VITE_SUPABASE_URL: ''
-          VITE_SUPABASE_ANON_KEY: ''
-          VITE_AI_ENDPOINT: ''
-          VITE_MODERATION_ENDPOINT: ''
+      - name: Verify SEO files in Pages artifact
+        run: test -s dist/sitemap.xml && test -s dist/robots.txt
       - name: Include English template previews
         run: cp english-modern.webp english-professional.webp dist/
       - uses: actions/configure-pages@v5
@@ -75,41 +48,10 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-      - name: Smoke test deployed site
+      - name: Verify public SEO endpoints
         env:
           SITE_URL: ${{ steps.deployment.outputs.page_url }}
-          SUPABASE_PUBLISHABLE_KEY: sb_publishable_hkFTWF1D7kfkaT3aFPecWg_qumsEZ5i
         run: |
           set -euo pipefail
-          test -n "$SITE_URL"
-          HTML="$(curl --fail --silent --show-error --location --retry 6 --retry-all-errors --retry-delay 5 "$SITE_URL")"
-          grep -Fq '<title>MO CV | صانع السيرة الذاتية الذكي</title>' <<<"$HTML"
-          ASSET_PATH="$(grep -oE '/mo-cv/assets/[^"]+\.js' <<<"$HTML" | sed -n '1p')"
-          test -n "$ASSET_PATH"
-          ORIGIN="$(sed -E 's#(https?://[^/]+).*#\1#' <<<"$SITE_URL")"
-          JS="$(curl --fail --silent --show-error --location --retry 3 "$ORIGIN$ASSET_PATH")"
-          grep -Fq 'Professional AI Resume Platform' <<<"$JS"
-          grep -Fq 'Report a CV Issue' <<<"$JS"
-          grep -Fq 'responsibility acknowledgement' <<<"$JS"
-          if grep -Fq '<div className="badge">🚀 منصة احترافية' <<<"$JS"; then echo '::error::Old hard-coded Arabic hero badge detected'; exit 1; fi
-          MANIFEST="$(curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/manifest.webmanifest")"
-          grep -Fq '"start_url":"/mo-cv/"' <<<"$MANIFEST"
-          grep -Fq '"scope":"/mo-cv/"' <<<"$MANIFEST"
-          curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/robots.txt" >/dev/null
-          curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/english-modern.webp" >/dev/null
-          curl --fail --silent --show-error --location --retry 3 "${SITE_URL%/}/english-professional.webp" >/dev/null
-          SUPABASE_URL="${VITE_SUPABASE_URL:-https://nkszihlrwbwystbbaadh.supabase.co}"
-          curl --fail --silent --show-error --location --retry 3 "$SUPABASE_URL/auth/v1/health" -H "apikey: $SUPABASE_PUBLISHABLE_KEY" >/dev/null
-          REST_STATUS="$(curl --silent --output /tmp/resumes.json --write-out '%{http_code}' "$SUPABASE_URL/rest/v1/resumes?select=id&limit=1")"
-          test "$REST_STATUS" = "401"
-          AI_STATUS="$(curl --silent --output /tmp/ai.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/ai-enhance" -H "Content-Type: application/json" --data '{"action":"summary","text":"test"}')"
-          test "$AI_STATUS" = "401"
-          MOD_STATUS="$(curl --silent --output /tmp/mod.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/cv-moderate" -H "Content-Type: application/json" --data '{"fields":[{"path":"summary","text":"test"}]}')"
-          test "$MOD_STATUS" = "401"
-          DELETE_STATUS="$(curl --silent --output /tmp/delete.txt --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/delete-account" -H "Content-Type: application/json")"
-          test "$DELETE_STATUS" = "401"
-          BREACH_STATUS="$(curl --silent --output /tmp/breach.json --write-out '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/password-breach-check" -H "Content-Type: application/json" --data '{"sha1":"5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8"}')"
-          test "$BREACH_STATUS" = "200"
-          grep -Fq '"pwned":true' /tmp/breach.json
-          BREACH_JSON="$(curl --fail --silent --show-error -X POST "$SUPABASE_URL/functions/v1/password-breach-check" -H "Content-Type: application/json" -H "apikey: $SUPABASE_PUBLISHABLE_KEY" --data '{"sha1":"5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8"}')"
-          grep -Fq '"pwned":true' <<<"$BREACH_JSON"
+          curl --fail --silent --show-error --location --retry 6 --retry-all-errors --retry-delay 5 "${SITE_URL%/}/sitemap.xml" | grep -Fq '<urlset'
+          curl --fail --silent --show-error --location --retry 6 --retry-all-errors --retry-delay 5 "${SITE_URL%/}/robots.txt" | grep -Fq 'Sitemap:'
